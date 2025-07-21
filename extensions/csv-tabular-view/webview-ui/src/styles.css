@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Table styles - ensure no alternating row colors */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #444;
+  padding: 4px 8px;
+  color: #eee;
+}
+
+tr {
+  background: #222;
+}
+
+/* Remove any alternating row colors */
+tr:nth-child(even) {
+  background: #222;
+}
+
+tr:nth-child(odd) {
+  background: #222;
+}
+
+thead {
+  background: #333;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+th {
+  background: #333;
+  color: #fff;
+}

@@ -1,0 +1,38 @@
+{
+  "name": "csv-tabular-view",
+  "version": "1.0.0",
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onCustomEditor:bqdev.csvTabularEditor"
+  ],
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/vscode": "^1.80.0"
+  },
+  "scripts": {
+    "build:webview": "cd webview-ui && ng build --configuration production",
+    "build": "npm run build:webview && tsc -p ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "publisher": "bqdev",
+  "displayName": "CSV Tabular View",
+  "description": "View CSV files in a tabular format.",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": ["Other"],
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "bqdev.csvTabularEditor",
+        "displayName": "CSV Tabular Editor",
+        "selector": [
+          { "filenamePattern": "*.csv" }
+        ],
+        "priority": "default"
+      }
+    ]
+  }
+}
