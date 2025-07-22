@@ -72,6 +72,7 @@ const compilations = [
 	'.vscode/extensions/vscode-selfhost-test-provider/tsconfig.json',
 	'.vscode/extensions/vscode-selfhost-import-aid/tsconfig.json',
 	'extensions/csv-tabular-view/tsconfig.json',
+	'extensions/google-cloud-authentication/tsconfig.json',
 ];
 
 const getBaseUrl = out => `https://main.vscode-cdn.net/sourcemaps/${commit}/${out}`;

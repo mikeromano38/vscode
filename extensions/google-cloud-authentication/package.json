@@ -1,0 +1,180 @@
+{
+  "name": "google-cloud-authentication",
+  "displayName": "Google Cloud Authentication",
+  "description": "Authenticate with Google Cloud and manage GCP projects",
+  "publisher": "vscode",
+  "license": "MIT",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.41.0"
+  },
+  "icon": "images/icon.png",
+  "categories": [
+    "Other"
+  ],
+  "api": "none",
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "enabledApiProposals": [
+    "authIssuers",
+    "authProviderSpecific"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "virtualWorkspaces": true,
+    "untrustedWorkspaces": {
+      "supported": "limited"
+    }
+  },
+  "protocols": [
+    "vscode"
+  ],
+  "contributes": {
+    "authentication": [
+      {
+        "label": "Google Cloud",
+        "id": "google-cloud",
+        "authorizationServerGlobs": [
+          "https://accounts.google.com/*"
+        ]
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Google Cloud Authentication",
+        "properties": {
+          "google-cloud.projectId": {
+            "type": "string",
+            "default": "",
+            "description": "The default Google Cloud project ID to use"
+          },
+          "google-cloud.region": {
+            "type": "string",
+            "default": "us-central1",
+            "description": "The default Google Cloud region to use"
+          },
+          "google-cloud.autoAuthenticate": {
+            "type": "boolean",
+            "default": true,
+            "description": "Automatically prompt for authentication when no valid credentials are found"
+          }
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "google-cloud.authenticate",
+        "title": "Sign in to Google Cloud",
+        "category": "Google Cloud"
+      },
+      {
+        "command": "google-cloud.signOut",
+        "title": "Sign out of Google Cloud",
+        "category": "Google Cloud"
+      },
+      {
+        "command": "google-cloud.debug",
+        "title": "Debug Google Cloud Authentication",
+        "category": "Google Cloud"
+      },
+      {
+        "command": "google-cloud.testOAuth",
+        "title": "Test OAuth Flow",
+        "category": "Google Cloud"
+      },
+      {
+        "command": "google-cloud.showLogs",
+        "title": "Show Authentication Logs",
+        "category": "Google Cloud"
+      },
+      {
+        "command": "google-cloud.openSettings",
+        "title": "Open Google Cloud Settings",
+        "category": "Google Cloud"
+      },
+      {
+        "command": "google-cloud.checkStorage",
+        "title": "Check Authentication Storage",
+        "category": "Google Cloud"
+      },
+      {
+        "command": "google-cloud.clearAllSessions",
+        "title": "Clear All Authentication Sessions",
+        "category": "Google Cloud"
+      },
+      {
+        "command": "google-cloud.forceStopOAuth",
+        "title": "Force Stop OAuth Process",
+        "category": "Google Cloud"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "google-cloud.authenticate",
+          "when": "!google-cloud.hasValidSession"
+        },
+        {
+          "command": "google-cloud.signOut",
+          "when": "google-cloud.hasValidSession"
+        },
+        {
+          "command": "google-cloud.debug",
+          "when": "true"
+        },
+        {
+          "command": "google-cloud.testOAuth",
+          "when": "true"
+        },
+        {
+          "command": "google-cloud.showLogs",
+          "when": "true"
+        },
+        {
+          "command": "google-cloud.openSettings",
+          "when": "true"
+        },
+        {
+          "command": "google-cloud.checkStorage",
+          "when": "true"
+        },
+        {
+          "command": "google-cloud.clearAllSessions",
+          "when": "true"
+        },
+        {
+          "command": "google-cloud.forceStopOAuth",
+          "when": "true"
+        }
+      ]
+    }
+  },
+  "main": "./out/extension.js",
+  "browser": "./dist/browser/extension.js",
+  "scripts": {
+    "compile": "gulp compile-extension:google-cloud-authentication",
+    "compile-web": "npx webpack-cli --config extension-browser.webpack.config --mode none",
+    "watch": "gulp watch-extension:google-cloud-authentication",
+    "watch-web": "npx webpack-cli --config extension-browser.webpack.config --mode none --watch --info-verbosity verbose",
+    "vscode:prepublish": "npm run compile"
+  },
+  "dependencies": {
+    "@vscode/extension-telemetry": "^0.9.8",
+    "node-fetch": "2.6.7",
+    "vscode-tas-client": "^0.1.84"
+  },
+  "devDependencies": {
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^22.16.5",
+    "@types/node-fetch": "^2.5.7",
+    "@types/vscode": "^1.102.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/vscode.git"
+  }
+}
