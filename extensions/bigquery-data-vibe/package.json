@@ -1,0 +1,193 @@
+{
+  "name": "bigquery-data-vibe",
+  "version": "1.0.0",
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "*"
+  ],
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/vscode": "^1.80.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "scripts": {
+    "build:webview": "echo 'Skipping webview build for now'",
+    "build": "tsc -p ."
+  },
+  "keywords": ["bigquery", "data", "csv", "analytics"],
+  "author": "",
+  "license": "ISC",
+  "publisher": "bqdev",
+  "displayName": "BigQuery Data Vibe",
+  "description": "BigQuery resource explorer and CSV data viewer for VS Code",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+
+  "enabledApiProposals": [
+    "authIssuers",
+    "authProviderSpecific"
+  ],
+  "categories": ["Data Science", "Other"],
+
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "bqdev.csvTabularEditor",
+        "displayName": "CSV Tabular Editor",
+        "selector": [
+          { "filenamePattern": "*.csv" }
+        ],
+        "priority": "default"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bigquery",
+          "title": "BigQuery",
+          "icon": "$(database)"
+        }
+      ]
+    },
+    "views": {
+      "bigquery": [
+        {
+          "id": "bigqueryExplorer",
+          "name": "BigQuery Explorer",
+          "when": "true"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "bigquery.test",
+        "title": "Test BigQuery Extension",
+        "category": "BigQuery"
+      },
+      {
+        "command": "bigquery.signIn",
+        "title": "Sign in to Google Cloud",
+        "category": "BigQuery"
+      },
+      {
+        "command": "bigquery.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)",
+        "category": "BigQuery"
+      },
+      {
+        "command": "bigquery.addProject",
+        "title": "Add Project",
+        "category": "BigQuery"
+      },
+      {
+        "command": "bigquery.configureProject",
+        "title": "Add More Projects",
+        "category": "BigQuery"
+      },
+      {
+        "command": "bigquery.disableProject",
+        "title": "Disable Project",
+        "category": "BigQuery"
+      },
+      {
+        "command": "bigquery.removeProject",
+        "title": "Remove Project",
+        "category": "BigQuery"
+      },
+      {
+        "command": "bigquery.openTable",
+        "title": "Open Table",
+        "category": "BigQuery"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "bigquery.refresh",
+          "when": "view == bigqueryExplorer",
+          "group": "navigation"
+        },
+        {
+          "command": "bigquery.addProject",
+          "when": "view == bigqueryExplorer",
+          "group": "navigation"
+        },
+        {
+          "command": "bigquery.configureProject",
+          "when": "view == bigqueryExplorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "bigquery.openTable",
+          "when": "view == bigqueryExplorer && viewItem == bigquery-table",
+          "group": "inline"
+        },
+        {
+          "command": "bigquery.signIn",
+          "when": "view == bigqueryExplorer && viewItem == bigquery-error",
+          "group": "inline"
+        },
+        {
+          "command": "bigquery.disableProject",
+          "when": "view == bigqueryExplorer && viewItem == bigquery-project",
+          "group": "inline"
+        },
+        {
+          "command": "bigquery.removeProject",
+          "when": "view == bigqueryExplorer && viewItem == bigquery-project",
+          "group": "inline"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "BigQuery Data Vibe",
+      "properties": {
+        "bigquery.projects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "projectId": {
+                "type": "string",
+                "description": "Google Cloud project ID"
+              },
+              "name": {
+                "type": "string",
+                "description": "Display name for the project (optional)"
+              },
+              "enabled": {
+                "type": "boolean",
+                "default": true,
+                "description": "Whether this project is enabled in the explorer"
+              }
+            },
+            "required": ["projectId"]
+          },
+          "default": [],
+          "description": "List of Google Cloud projects to display in the BigQuery explorer"
+        },
+        "bigquery.defaultProjectId": {
+          "type": "string",
+          "default": "",
+          "description": "Default Google Cloud project ID for new operations (optional)"
+        },
+        "bigquery.region": {
+          "type": "string",
+          "default": "US",
+          "description": "Default BigQuery region"
+        },
+        "bigquery.maxResults": {
+          "type": "number",
+          "default": 1000,
+          "description": "Maximum number of results to fetch from BigQuery"
+        }
+      }
+    }
+  }
+}

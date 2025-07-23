@@ -1,0 +1,131 @@
+<div class="bigquery-table-container" *ngIf="metadata && !loading && !error">
+  <div class="header">
+    <h1>{{ displayName }}</h1>
+    <div class="header-actions">
+      <button class="reveal-button" (click)="revealInExplorer()">
+        <span class="icon">🔍</span>
+        Reveal in Explorer
+      </button>
+    </div>
+    <div class="subtitle">
+      <span class="badge" [class]="metadata.type.toLowerCase()">{{ metadata.type }}</span>
+      {{ metadata.tableId }}
+    </div>
+  </div>
+
+  <div class="metadata-grid">
+    <div class="metadata-section">
+      <h3>Basic Information</h3>
+      <div class="metadata-item">
+        <div class="metadata-label">Table ID</div>
+        <div class="metadata-value">{{ metadata.tableId }}</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Created</div>
+        <div class="metadata-value">{{ formatDate(metadata.creationTime) }}</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Last Modified</div>
+        <div class="metadata-value">{{ formatDate(metadata.lastModifiedTime) }}</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Table Expiration</div>
+        <div class="metadata-value" [class.none]="!metadata.expirationTime">
+          {{ formatDate(metadata.expirationTime) }}
+        </div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Data Location</div>
+        <div class="metadata-value">{{ metadata.location || 'Not set' }}</div>
+      </div>
+    </div>
+
+    <div class="metadata-section">
+      <h3>Configuration</h3>
+      <div class="metadata-item">
+        <div class="metadata-label">Default Collation</div>
+        <div class="metadata-value">{{ metadata.defaultCollation || 'Not set' }}</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Default Rounding Mode</div>
+        <div class="metadata-value">{{ metadata.defaultRoundingMode || 'Not set' }}</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Case Insensitive</div>
+        <div class="metadata-value">{{ metadata.caseInsensitive ? 'Yes' : 'No' }}</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Primary Key(s)</div>
+        <div class="metadata-value" [class.none]="!metadata.primaryKeys || metadata.primaryKeys.length === 0">
+          {{ metadata.primaryKeys?.join(', ') || 'None' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="metadata-section full-width">
+      <h3>Description</h3>
+      <div class="metadata-value" [class.none]="!metadata.description">
+        {{ metadata.description || 'No description available' }}
+      </div>
+    </div>
+
+    <div class="metadata-section">
+      <h3>Labels</h3>
+      <div class="metadata-value" [class.none]="!metadata.labels || Object.keys(metadata.labels).length === 0">
+        {{ formatLabels(metadata.labels) }}
+      </div>
+    </div>
+
+    <div class="metadata-section">
+      <h3>Storage</h3>
+      <div class="metadata-item">
+        <div class="metadata-label">Size</div>
+        <div class="metadata-value">{{ formatBytes(metadata.numBytes) }}</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Long-term Storage</div>
+        <div class="metadata-value">{{ formatBytes(metadata.numLongTermBytes) }}</div>
+      </div>
+      <div class="metadata-item">
+        <div class="metadata-label">Row Count</div>
+        <div class="metadata-value">
+          {{ metadata.numRows ? (parseInt(metadata.numRows) | number) : 'Unknown' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="schema-section" *ngIf="hasSchema">
+    <div class="metadata-section">
+      <h3>Schema</h3>
+      <table class="schema-table">
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>Type</th>
+            <th>Mode</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let field of metadata.schema.fields">
+            <td>{{ field.name }}</td>
+            <td>{{ field.type }}</td>
+            <td>{{ field.mode || 'NULLABLE' }}</td>
+            <td>{{ field.description || '' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="loading-container" *ngIf="loading">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading table metadata...</div>
+</div>
+
+<div class="error-container" *ngIf="error">
+  <div class="error-icon">⚠️</div>
+  <div class="error-message">{{ error }}</div>
+</div> 
