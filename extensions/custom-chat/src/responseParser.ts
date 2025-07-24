@@ -186,6 +186,10 @@ export class ResponseParser {
       result.generatedSql = dataResponse.generatedSql;
     }
 
+    if (dataResponse.bigQueryJob) {
+      result.bigQueryJob = dataResponse.bigQueryJob;
+    }
+
     if (dataResponse.result) {
       result.data = this.formatDataTable(dataResponse.result);
     }

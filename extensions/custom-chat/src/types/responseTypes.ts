@@ -34,6 +34,15 @@ export interface BigQueryTableReference {
   tableId: string;
 }
 
+export interface BigQueryJob {
+  id: string;
+  destinationTable?: {
+    projectId: string;
+    datasetId: string;
+    tableId: string;
+  };
+}
+
 export interface LookerExploreReference {
   lookmlModel: string;
   explore: string;
@@ -63,6 +72,7 @@ export interface DataResponse {
     datasources: DataSource[];
   };
   generatedSql?: string;
+  bigQueryJob?: BigQueryJob;
   result?: {
     schema: SchemaResult;
     data: Record<string, any>[];

@@ -49,6 +49,7 @@ export class ConfigHelper {
         const config = vscode.workspace.getConfiguration(this.CONFIG_SECTION);
         const customDataSources = config.get<DataSourceReferences>('dataSources');
         
+        
         if (customDataSources && customDataSources.bq?.tableReferences && customDataSources.bq.tableReferences.length > 0) {
             return customDataSources;
         }
@@ -84,7 +85,8 @@ export class ConfigHelper {
 
     static getAnalysisOptions(): AnalysisOptions {
         const config = vscode.workspace.getConfiguration(this.CONFIG_SECTION);
-        const pythonEnabled = config.get<boolean>('enablePythonAnalysis', true);
+        // Disable Python analysis - always return false
+        const pythonEnabled = false;
         
         return {
             analysis: {

@@ -49,6 +49,15 @@ import { VegaChartService, ChartData } from '../services/vega-chart.service';
 
       <!-- Data Content -->
       <div *ngSwitchCase="'data'" class="data-content">
+        <div *ngIf="data.bigQueryJob" class="bigquery-job-info">
+          <h3>🔄 Running Query</h3>
+          <p><strong>Job ID:</strong> {{ data.bigQueryJob.id }}</p>
+          <div *ngIf="data.bigQueryJob.destinationTable" class="destination-table">
+            <strong>Destination Table:</strong>
+            <p>{{ data.bigQueryJob.destinationTable.projectId }}.{{ data.bigQueryJob.destinationTable.datasetId }}.{{ data.bigQueryJob.destinationTable.tableId }}</p>
+          </div>
+        </div>
+
         <div *ngIf="data.query" class="query-info">
           <h3>Retrieval Query</h3>
           <p><strong>Query name:</strong> {{ data.query.name }}</p>
@@ -444,6 +453,37 @@ import { VegaChartService, ChartData } from '../services/vega-chart.service';
       text-decoration: underline;
       color: var(--vscode-textLink-activeForeground);
     }
+
+    .bigquery-job-info {
+      background-color: var(--vscode-textBlockQuote-background);
+      border: 1px solid var(--vscode-input-border);
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .bigquery-job-info h3 {
+      margin: 0 0 8px 0;
+      color: var(--vscode-editor-foreground);
+      font-size: 14px;
+    }
+
+    .bigquery-job-info p {
+      margin: 4px 0;
+      font-size: 13px;
+    }
+
+    .destination-table {
+      margin-top: 8px;
+    }
+
+    .destination-table p {
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      background-color: var(--vscode-input-background);
+      padding: 4px 8px;
+      border-radius: 2px;
+      margin: 4px 0;
+    }
   `]
 })
 export class MessageContentComponent implements OnInit, AfterViewInit {
@@ -532,6 +572,10 @@ export class MessageContentComponent implements OnInit, AfterViewInit {
   }
 
   getDisplayRows(): any[] {
+    if (!this.data?.data?.rows) {
+      return [];
+    }
+    
     if (this.showFullTable) {
       return this.data.data.rows;
     } else {
