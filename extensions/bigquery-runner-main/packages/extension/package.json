@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "name": "extension",
+  "main": "src/extension.ts",
+  "scripts": {
+    "dev": "run-p build:watch",
+    "build": "esbuild ./src/index.ts --bundle --outfile=../../out/extension/index.js --external:vscode --format=cjs --platform=node",
+    "build:watch": "npm run build -- --sourcemap --watch",
+    "build-production": "npm run build -- --minify",
+    "build-debug": "npm run build -- --sourcemap",
+    "lint": "eslint \"./src/**/*.ts\"",
+    "fix": "run-p fix:*",
+    "fix:lint": "npm run lint -- --fix",
+    "fix:format": "npm run format -- --write",
+    "check": "run-p check:*",
+    "check:tsc": "tsc",
+    "check:format": "npm run format -- --check",
+    "format": "prettier --write src"
+  }
+}

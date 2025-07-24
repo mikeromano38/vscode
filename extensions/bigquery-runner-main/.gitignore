@@ -1,0 +1,12 @@
+.DS_Store
+.vscode-test
+coverage
+dist
+out
+output
+node_modules
+service-account.json
+*.jsonl
+*.csv
+*.txt
+名称未設定.*

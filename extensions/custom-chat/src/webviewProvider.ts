@@ -65,6 +65,10 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
                         console.log('Handling testExtension');
                         this._handleTestExtension();
                         return;
+                    case 'openSqlInEditor':
+                        console.log('Handling openSqlInEditor');
+                        this._handleOpenSqlInEditor(message.sql);
+                        return;
                     default:
                         console.log('Unknown command:', message.command);
                         return;
@@ -368,6 +372,31 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
             console.error('Test failed:', error);
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
             this._view.webview.postMessage({ command: 'addError', text: `❌ Test failed: ${errorMessage}` });
+        }
+    }
+
+    private async _handleOpenSqlInEditor(sql: string) {
+        try {
+            console.log('=== Opening SQL in editor ===');
+            console.log('SQL:', sql);
+            
+            // Create a new untitled document with SQL content
+            const document = await vscode.workspace.openTextDocument({
+                content: sql,
+                language: 'sql'
+            });
+            
+            // Open the document in a new editor tab
+            await vscode.window.showTextDocument(document, {
+                viewColumn: vscode.ViewColumn.Beside,
+                preview: false
+            });
+            
+            console.log('SQL opened in editor successfully');
+            
+        } catch (error) {
+            console.error('Failed to open SQL in editor:', error);
+            vscode.window.showErrorMessage(`Failed to open SQL in editor: ${error}`);
         }
     }
 } 

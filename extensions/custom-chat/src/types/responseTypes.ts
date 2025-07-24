@@ -35,7 +35,7 @@ export interface BigQueryTableReference {
 }
 
 export interface BigQueryJob {
-  id: string;
+  jobId: string;
   destinationTable?: {
     projectId: string;
     datasetId: string;

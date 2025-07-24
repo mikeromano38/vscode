@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { MessageContentType } from '../../types/responseTypes';
 import { VegaChartService, ChartData } from '../services/vega-chart.service';
+import { VscodeApiService } from '../services/vscode-api.service';
 
 @Component({
   selector: 'app-message-content',
@@ -72,6 +73,11 @@ import { VegaChartService, ChartData } from '../services/vega-chart.service';
 
         <div *ngIf="data.generatedSql" class="sql-content">
           <h3>SQL Generated</h3>
+          <div class="sql-header">
+            <button class="open-sql-button" (click)="openSqlInEditor(data.generatedSql)">
+              📄 Open in SQL Editor
+            </button>
+          </div>
           <pre><code class="sql">{{ data.generatedSql }}</code></pre>
         </div>
 
@@ -484,6 +490,31 @@ import { VegaChartService, ChartData } from '../services/vega-chart.service';
       border-radius: 2px;
       margin: 4px 0;
     }
+
+    .sql-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
+    }
+
+    .open-sql-button {
+      background-color: var(--vscode-button-background);
+      color: var(--vscode-button-foreground);
+      border: 1px solid var(--vscode-button-border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .open-sql-button:hover {
+      background-color: var(--vscode-button-hoverBackground);
+    }
+
+    .open-sql-button:active {
+      background-color: var(--vscode-button-activeBackground);
+    }
   `]
 })
 export class MessageContentComponent implements OnInit, AfterViewInit {
@@ -499,6 +530,8 @@ export class MessageContentComponent implements OnInit, AfterViewInit {
   showFullTable = false;
   truncatedRows: any[] = [];
   totalRows = 0;
+
+  constructor(private vscodeApiService: VscodeApiService) {}
 
   async ngOnInit() {
     // Initialize chart data when component loads
@@ -591,5 +624,23 @@ export class MessageContentComponent implements OnInit, AfterViewInit {
   showLimitedResults(event: Event) {
     event.preventDefault();
     this.showFullTable = false;
+  }
+
+  openSqlInEditor(sql: string) {
+    console.log('=== openSqlInEditor called ===');
+    console.log('SQL:', sql);
+    console.log('VS Code API available:', this.vscodeApiService.isAvailable());
+    
+    // Send message to the extension to open SQL in editor
+    if (this.vscodeApiService.isAvailable()) {
+      const message = {
+        command: 'openSqlInEditor',
+        sql: sql
+      };
+      console.log('Sending message to extension:', message);
+      this.vscodeApiService.postMessage(message);
+    } else {
+      console.error('VS Code API not available');
+    }
   }
 } 

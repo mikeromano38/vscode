@@ -1,0 +1,2145 @@
+{
+  "header": ["en_label", "labels.language", "labels.value"],
+  "rows": [
+    {
+      "rowNumber": "1",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Nanosatellite Launch System" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "CANX 2" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Nanosatellite Launch System" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ja" },
+          {
+            "id": "labels.value",
+            "value": "ナノサテライト・ローンチ・システム"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "2",
+      "rows": [
+        [
+          { "id": "en_label", "value": null },
+          { "id": "labels.language", "value": "zh" },
+          { "id": "labels.value", "value": "萧伯游" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ja" },
+          { "id": "labels.value", "value": "蕭伯游" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "lzh" },
+          { "id": "labels.value", "value": "蕭伯遊" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "3",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Old Swansea Central Library" },
+          { "id": "labels.language", "value": "cy" },
+          { "id": "labels.value", "value": "Hen Lyfrgell Ganolog Abertawe" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Old Swansea Central Library" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ja" },
+          { "id": "labels.value", "value": "オールド・スウォンジー中央図書館" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "4",
+      "rows": [
+        [
+          { "id": "en_label", "value": "1998 JGTC season" },
+          { "id": "labels.language", "value": "ja" },
+          { "id": "labels.value", "value": "1998年の全日本GT選手権" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "1998 JGTC season" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "5",
+      "rows": [
+        [
+          { "id": "en_label", "value": "USCGC Burton Island" },
+          { "id": "labels.language", "value": "ja" },
+          { "id": "labels.value", "value": "バートン・アイランド" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "USCGC Burton Island" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "6",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Ten temples" },
+          { "id": "labels.language", "value": "zh" },
+          { "id": "labels.value", "value": "十剎" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ja" },
+          { "id": "labels.value", "value": "十刹" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Ten temples" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "7",
+      "rows": [
+        [
+          { "id": "en_label", "value": null },
+          { "id": "labels.language", "value": "zh" },
+          { "id": "labels.value", "value": "反共法" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ja" },
+          { "id": "labels.value", "value": "反共法" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ko" },
+          { "id": "labels.value", "value": "반공법" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "8",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Buena Vista Winery" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Buena Vista Winery" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ja" },
+          { "id": "labels.value", "value": "ブエナ・ビスタ・ワイナリー" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "9",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Aoki paperback" },
+          { "id": "labels.language", "value": "zh" },
+          { "id": "labels.value", "value": "青木文库" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ja" },
+          { "id": "labels.value", "value": "青木文庫" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Aoki paperback" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "10",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U2-V" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U2-V" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U2-V" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "11",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U1-G" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U1-G" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U1-G" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ru" },
+          { "id": "labels.value", "value": "ДС-У1-Г" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "12",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-K-40" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-K-40" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-K-40" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          { "id": "labels.value", "value": "DS-K-40" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "13",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U2-MP" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U2-MP" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U2-MP" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "14",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Pulsometer steam pump" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Pulsometer" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Pulsometer steam pump" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ca" },
+          { "id": "labels.value", "value": "Pulsòmetre" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "15",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U2-GK" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U2-GK" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U2-GK" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "16",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Bacino carbonifero del Sulcis" },
+          { "id": "labels.language", "value": "it" },
+          { "id": "labels.value", "value": "bacino carbonifero del Sulcis" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Bacino carbonifero del Sulcis" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "17",
+      "rows": [
+        [
+          { "id": "en_label", "value": "new media art preservation" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "new media art preservation" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "hr" },
+          {
+            "id": "labels.value",
+            "value": "Konzervacija novih umjetničkih medija"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "eo" },
+          {
+            "id": "labels.value",
+            "value": "konservado de arto de novaj komunikiloj"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "18",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U2-M" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U2-M" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U2-M" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "19",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U2-D" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U2-D" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U2-D" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "20",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U2-GKA" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U2-GKA" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U2-GKA" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "21",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Hallila" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Hallila" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fi" },
+          { "id": "labels.value", "value": "Hallila" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "22",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-P1-Yu" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-P1-Yu" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-P1-Yu" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "DS-P1-Yu" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "23",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-MG" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-MG" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-MG" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pl" },
+          { "id": "labels.value", "value": "DS-MG" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "24",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "Brown coal mining limits in North Bohemia"
+          },
+          { "id": "labels.language", "value": "cs" },
+          {
+            "id": "labels.value",
+            "value": "územní limity těžby hnědého uhlí v severních Čechách"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "Brown coal mining limits in North Bohemia"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "25",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U2-IK" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U2-IK" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U2-IK" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "DS-U2-IK" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "26",
+      "rows": [
+        [
+          { "id": "en_label", "value": "M & Co." },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "M & Co." }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en-ca" },
+          { "id": "labels.value", "value": "M & Co." }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en-gb" },
+          { "id": "labels.value", "value": "M & Co." }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "27",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Kaposszentjakab" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Kaposszentjakab" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "hr" },
+          { "id": "labels.value", "value": "Kaposszentjakab" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "hu" },
+          { "id": "labels.value", "value": "Kaposszentjakab" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "28",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U2-MG" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U2-MG" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U2-MG" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "29",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Utang na loob" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Utang na loob" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "tl" },
+          { "id": "labels.value", "value": "Utang na loob" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fr" },
+          { "id": "labels.value", "value": "Utang na loob" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "30",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Kultavuori" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Kultavuori" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fi" },
+          { "id": "labels.value", "value": "Kultavuori" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "31",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Cuisine of Lazio" },
+          { "id": "labels.language", "value": "id" },
+          { "id": "labels.value", "value": "Masakan Lazio" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "jv" },
+          { "id": "labels.value", "value": "Masakan Lazio" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Cuisine of Lazio" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "32",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Order of Railroad Telegraphers" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Order of Railroad Telegraphers" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "33",
+      "rows": [
+        [
+          { "id": "en_label", "value": "DS-U1-Ya" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "DS-U1-Ya" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "DS-U1-Ya" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ru" },
+          { "id": "labels.value", "value": "ДС-У1-Я" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "34",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Diamant B-P4" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "Diamant B-P4" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Diamant B-P4" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "Diamant B-P4" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "35",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "2001 Argentina rugby union tour of New Zealand and Great Britain"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "2001 Argentina rugby union tour of New Zealand and Great Britain"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 2001"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "36",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "1992 Argentina rugby union tour of Europe"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "1992 Argentina rugby union tour of Europe"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 1992"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "37",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "1998 Argentina rugby union tour of Japan and Europe"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "1998 Argentina rugby union tour of Japan and Europe"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 1998"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "38",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "1997 Argentina rugby union tour of New Zealand"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "1997 Argentina rugby union tour of New Zealand"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 1997"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "39",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "2000 Argentina rugby union tour of Australia and England"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "2000 Argentina rugby union tour of Australia and England"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 2000"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "40",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "1996 Argentina rugby union tour of England"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "1996 Argentina rugby union tour of England"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 1996"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "41",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "1994 Argentina rugby union tour of South Africa"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "1994 Argentina rugby union tour of South Africa"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 1994"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "42",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "2002 Argentina rugby union tour of South Africa and Europe"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "2002 Argentina rugby union tour of South Africa and Europe"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 2002"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "43",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "2003 Argentina rugby union tour of South Africa"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "2003 Argentina rugby union tour of South Africa"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 2003"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "44",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "1999 Argentina rugby union tour of Scotland and Ireland"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "1999 Argentina rugby union tour of Scotland and Ireland"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "it" },
+          {
+            "id": "labels.value",
+            "value": "Tour della Nazionale di rugby a 15 dell'Argentina 1999"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "45",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "2012 Men's Arab Volleyball Championship"
+          },
+          { "id": "labels.language", "value": "fr" },
+          {
+            "id": "labels.value",
+            "value": "championnat arabe de volley-ball masculin 2012"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "2012 Men's Arab Volleyball Championship"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "sk" },
+          {
+            "id": "labels.value",
+            "value": "Arabské majstrovstvá vo volejbale mužov 2012"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "46",
+      "rows": [
+        [
+          { "id": "en_label", "value": "CEP 1" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "CEP 1" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "CEP 1" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "CEP-1" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "47",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Alfred-Jarry-Theatre" },
+          { "id": "labels.language", "value": "fr" },
+          { "id": "labels.value", "value": "théâtre Alfred Jarry" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Alfred-Jarry-Theater" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Alfred-Jarry-Theatre" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "48",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Phare de Sauzon" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Phare de Sauzon" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fr" },
+          { "id": "labels.value", "value": "phare de Sauzon" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Phare de Sauzon" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "49",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Port-Navalo lighthouse" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Phare de Port-Navalo" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fr" },
+          { "id": "labels.value", "value": "phare de Port-Navalo" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Port-Navalo lighthouse" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "50",
+      "rows": [
+        [
+          { "id": "en_label", "value": "4 April 2010 Baghdad bombings" },
+          { "id": "labels.language", "value": "pt" },
+          {
+            "id": "labels.value",
+            "value": "Bombardeios em Bagdá em abril de 2010"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "4 April 2010 Baghdad bombings" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          {
+            "id": "labels.value",
+            "value": "Bomaanslagen in Bagdad op 4 april 2010"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "51",
+      "rows": [
+        [
+          { "id": "en_label", "value": "US Bancorp Center" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "US Bancorp Center" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "hr" },
+          { "id": "labels.value", "value": "U.S. Bancorp Center" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "arz" },
+          { "id": "labels.value", "value": "مركز بانكورب الامريكى" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "52",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "Verwaltungsgemeinschaft Rund um den Auersberg"
+          },
+          { "id": "labels.language", "value": "de" },
+          {
+            "id": "labels.value",
+            "value": "Verwaltungsgemeinschaft Rund um den Auersberg"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pl" },
+          {
+            "id": "labels.value",
+            "value": "Wspólnota administracyjna Rund um den Auersberg"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "Verwaltungsgemeinschaft Rund um den Auersberg"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "53",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "Verwaltungsgemeinschaft Meerane-Schönberg"
+          },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Verwaltungsgemeinschaft Meerane" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pl" },
+          { "id": "labels.value", "value": "Wspólnota administracyjna Meerane" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "Verwaltungsgemeinschaft Meerane-Schönberg"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "54",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "2009 KNSB Dutch Allround Championships"
+          },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "2009 KNSB Dutch Allround Championships"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          {
+            "id": "labels.value",
+            "value": "Nederlandse kampioenschappen schaatsen allround 2009"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "55",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "football at the 2012 Summer Olympics AFC–CAF play-off"
+          },
+          { "id": "labels.language", "value": "zh" },
+          {
+            "id": "labels.value",
+            "value": "2012年夏季奧林匹克運動會足球比賽外圍賽洲際附加賽"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "football at the 2012 Summer Olympics AFC–CAF play-off"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "da" },
+          {
+            "id": "labels.value",
+            "value": "Fodbold under Sommer-OL 2012 – AFC–CAF play-off"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "56",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Gertrud Rasch's Church" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Gertrud Rasch's Church" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "da" },
+          { "id": "labels.value", "value": "Gertrud Rasks Kirke" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nb" },
+          { "id": "labels.value", "value": "Gertrud Rasks Kirke" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "57",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Santa Maria De Foras church" },
+          { "id": "labels.language", "value": "it" },
+          { "id": "labels.value", "value": "chiesa di Santa Maria De Foras" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          { "id": "labels.value", "value": "Chiesa di Santa Maria De Foras" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Santa Maria De Foras church" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "58",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Church of St. Paul" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "St. Paulus" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pl" },
+          {
+            "id": "labels.value",
+            "value": "kościół Świętego Pawła w Rudzie Śląskiej-Nowym Bytomiu"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Church of St. Paul" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "59",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Church of Saint Alexander Nevsky" },
+          { "id": "labels.language", "value": "ru" },
+          { "id": "labels.value", "value": "Александро-Невская церковь" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          { "id": "labels.value", "value": "Alexander Nevskikerk" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Church of Saint Alexander Nevsky" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "60",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Church of the Transfiguration" },
+          { "id": "labels.language", "value": "ru" },
+          { "id": "labels.value", "value": "Храм Преображения Господня" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          { "id": "labels.value", "value": "Transfiguratiekerk" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Church of the Transfiguration" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "61",
+      "rows": [
+        [
+          { "id": "en_label", "value": "St. Andreas" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "St. Andreas" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "St. Andreas" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "62",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Worlds' Finest" },
+          { "id": "labels.language", "value": "ru" },
+          { "id": "labels.value", "value": "Worlds' Finest" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Worlds' Finest" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fr" },
+          { "id": "labels.value", "value": "Worlds' Finest" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "63",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Sohni" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Sohni" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "sa" },
+          { "id": "labels.value", "value": "सोहनीरागः" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "bn" },
+          { "id": "labels.value", "value": "রাগ সোহনী" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "64",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Qachu Quta" },
+          { "id": "labels.language", "value": "ay" },
+          { "id": "labels.value", "value": "Qachu Quta" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "qu" },
+          { "id": "labels.value", "value": "Qachu Quta" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Qachu Quta" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "65",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Ahlhorn–Vechta railway" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Bahnstrecke Ahlhorn–Vechta" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          { "id": "labels.value", "value": "spoorlijn Ahlhorn - Vechta" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Ahlhorn–Vechta railway" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "66",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Vechta–Cloppenburg railway" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Bahnstrecke Vechta–Cloppenburg" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          { "id": "labels.value", "value": "spoorlijn Vechta - Cloppenburg" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Vechta–Cloppenburg railway" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "67",
+      "rows": [
+        [
+          { "id": "en_label", "value": "USCGC Staten Island" },
+          { "id": "labels.language", "value": "sl" },
+          { "id": "labels.value", "value": "USCGC Staten Island" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ru" },
+          { "id": "labels.value", "value": "Капитан Белоусов" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "USCGC Staten Island" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "68",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Eigental" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Eigental" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Eigental" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "gsw" },
+          { "id": "labels.value", "value": "Eigetal" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "69",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Ipoh–Lumut Expressway" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Ipoh–Lumut Expressway" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ms" },
+          { "id": "labels.value", "value": "Lebuh Raya Ipoh–Lumut" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "70",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Eilean Dearg" },
+          { "id": "labels.language", "value": "nn" },
+          { "id": "labels.value", "value": "Eilean Dearg" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Eilean Dearg" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ga" },
+          { "id": "labels.value", "value": "Eilean Dearg" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "71",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Allocatur" },
+          { "id": "labels.language", "value": "cy" },
+          { "id": "labels.value", "value": "Allocatur" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Allocatur" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fr" },
+          { "id": "labels.value", "value": "Allocatur" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "72",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "1st Royal Bavarian Chevau-légers \"Emperor Nicholas of Russia\""
+          },
+          { "id": "labels.language", "value": "de" },
+          {
+            "id": "labels.value",
+            "value": "Königlich Bayerisches 1. Chevaulegers-Regiment „Kaiser Nikolaus von Rußland“"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "de-ch" },
+          {
+            "id": "labels.value",
+            "value": "Königlich Bayerisches 1. Chevaulegers-Regiment „Kaiser Nikolaus von Russland“"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "1st Royal Bavarian Chevau-légers \"Emperor Nicholas of Russia\""
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "73",
+      "rows": [
+        [
+          { "id": "en_label", "value": "House of Rzhevsky" },
+          { "id": "labels.language", "value": "ru" },
+          { "id": "labels.value", "value": "Ржевские" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "House of Rzhevsky" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Familie Rschewski" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "74",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Bernistap Tunnel" },
+          { "id": "labels.language", "value": "fr" },
+          { "id": "labels.value", "value": "tunnel de Bernistap" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          { "id": "labels.value", "value": "Kanaal van Bernistap" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Bernistap Tunnel" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "75",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Fan Kam Road" },
+          { "id": "labels.language", "value": "zh" },
+          { "id": "labels.value", "value": "粉錦公路" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "yue" },
+          { "id": "labels.value", "value": "粉錦公路" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Fan Kam Road" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "76",
+      "rows": [
+        [
+          { "id": "en_label", "value": "HNLMS Van Amstel" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "HNLMS Van Amstel" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fi" },
+          { "id": "labels.value", "value": "Hr. Ms. Van Amstel" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          { "id": "labels.value", "value": "Hr. Ms. Van Amstel" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "77",
+      "rows": [
+        [
+          { "id": "en_label", "value": "CAT 3" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "CAT 3" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "CAT-3" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "CAT 3" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "78",
+      "rows": [
+        [
+          { "id": "en_label", "value": "CAT 4" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "CAT 4" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "CAT 4" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "CAT-4" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "79",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Gos d'atura aranès" },
+          { "id": "labels.language", "value": "ca" },
+          { "id": "labels.value", "value": "gos d'atura aranès" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fi" },
+          { "id": "labels.value", "value": "araninpaimenkoira" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Gos d'atura aranès" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "80",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "Protocol Amending the Single Convention on Narcotic Drugs"
+          },
+          { "id": "labels.language", "value": "de" },
+          {
+            "id": "labels.value",
+            "value": "Protokoll von 1972 zum Einheitsabkommen"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "Protocol Amending the Single Convention on Narcotic Drugs"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "81",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Hyllykallio" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Hyllykallio" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fi" },
+          { "id": "labels.value", "value": "Hyllykallio" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          { "id": "labels.value", "value": "Hyllykallio" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "82",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Lille Svenstrup" },
+          { "id": "labels.language", "value": "da" },
+          { "id": "labels.value", "value": "Lille Svenstrup" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nb" },
+          { "id": "labels.value", "value": "Lille Svenstrup" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Lille Svenstrup" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "83",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Freehold tram stop" },
+          { "id": "labels.language", "value": "cy" },
+          { "id": "labels.value", "value": "Gorsaf Metrolink Freehold" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Freehold tram stop" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "84",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "Swiss International Airlines Flight 850"
+          },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Swiss-Flug 850" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "Swiss International Airlines Flight 850"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ar" },
+          {
+            "id": "labels.value",
+            "value": "الخطوط الجوية الدولية السويسرية الرحلة 850"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "85",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Castor 4A" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "Castor 4A" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Castor 4A" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "Castor 4A" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "86",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Castor 4AXL" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "Castor 4AXL" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Castor 4AXL" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "Castor 4AXL" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "87",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Castor 4" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "Castor 4" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Castor 4" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "Castor 4" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "88",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Castor 1" },
+          { "id": "labels.language", "value": "gl" },
+          { "id": "labels.value", "value": "Castor 1" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Castor 1" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "pt" },
+          { "id": "labels.value", "value": "Castor 1" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "89",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Kasperi" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Kasperi" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fi" },
+          { "id": "labels.value", "value": "Kasperi" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "90",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Toponár" },
+          { "id": "labels.language", "value": "hr" },
+          { "id": "labels.value", "value": "Tupanar" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "hu" },
+          { "id": "labels.value", "value": "Toponár" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Toponár" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "91",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Church of the Theotokos of Kazan" },
+          { "id": "labels.language", "value": "ru" },
+          {
+            "id": "labels.value",
+            "value": "Храм Казанской Иконы Божьей Матери"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "nl" },
+          { "id": "labels.value", "value": "Kazankerk" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Church of the Theotokos of Kazan" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "92",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Petite Poste" },
+          { "id": "labels.language", "value": "fr" },
+          { "id": "labels.value", "value": "Petite Poste" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "Petite Poste" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Petite Poste" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "93",
+      "rows": [
+        [
+          { "id": "en_label", "value": "2012 Aysén protests" },
+          { "id": "labels.language", "value": "es" },
+          { "id": "labels.value", "value": "Protestas en Aysén de 2012" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "2012 Aysén protests" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "ca" },
+          { "id": "labels.value", "value": "Protestes d'Aysén del 2012" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "94",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Mental Health (Wales) Measure 2010" },
+          { "id": "labels.language", "value": "cy" },
+          { "id": "labels.value", "value": "Mesur Iechyd Meddwl (Cymru) 2010" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "Mental Health (Wales) Measure 2010"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en-gb" },
+          {
+            "id": "labels.value",
+            "value": "Mental Health (Wales) Measure 2010"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "95",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Standard Interchange Format" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Standard Interchange Format" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "sv" },
+          { "id": "labels.value", "value": "Standard Interchange Format" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "fr" },
+          { "id": "labels.value", "value": "Standard Interchange Format" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "96",
+      "rows": [
+        [
+          { "id": "en_label", "value": "Abramov Klin" },
+          { "id": "labels.language", "value": "ru" },
+          { "id": "labels.value", "value": "Абрамов Клин" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "Abramov Klin" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "97",
+      "rows": [
+        [
+          { "id": "en_label", "value": "ANHUI EXPRESSWAY COMPANY LIMITED" },
+          { "id": "labels.language", "value": "zh" },
+          { "id": "labels.value", "value": "安徽皖通高速公路" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "yue" },
+          { "id": "labels.value", "value": "安徽皖通高速公路" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          { "id": "labels.value", "value": "ANHUI EXPRESSWAY COMPANY LIMITED" }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "98",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "Croatian Radio and Television Tamburica Orchestra"
+          },
+          { "id": "labels.language", "value": "sh" },
+          { "id": "labels.value", "value": "Tamburaški orkestar HRT-a" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "hr" },
+          {
+            "id": "labels.value",
+            "value": "Tamburaški orkestar Hrvatske radiotelevizije"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "Croatian Radio and Television Tamburica Orchestra"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "99",
+      "rows": [
+        [
+          { "id": "en_label", "value": "2012 US Open Badminton Championships" },
+          { "id": "labels.language", "value": "zh" },
+          { "id": "labels.value", "value": "2012年美國羽毛球黃金大獎賽" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "de" },
+          { "id": "labels.value", "value": "US Open 2012" }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "2012 US Open Badminton Championships"
+          }
+        ]
+      ]
+    },
+    {
+      "rowNumber": "100",
+      "rows": [
+        [
+          {
+            "id": "en_label",
+            "value": "University Hospitals of the Ruhr-University of Bochum"
+          },
+          { "id": "labels.language", "value": "de" },
+          {
+            "id": "labels.value",
+            "value": "Universitätsklinikum der Ruhr-Universität Bochum"
+          }
+        ],
+        [
+          { "id": "en_label" },
+          { "id": "labels.language", "value": "en" },
+          {
+            "id": "labels.value",
+            "value": "University Hospitals of the Ruhr-University of Bochum"
+          }
+        ]
+      ]
+    }
+  ],
+  "metadata": {
+    "kind": "bigquery#job",
+    "etag": "R5ERuCbay5yXO55id8k0NA==",
+    "id": "minodisk-api:US.7a72032d-62b1-4d42-89d1-1ad4df110852",
+    "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/minodisk-api/jobs/7a72032d-62b1-4d42-89d1-1ad4df110852?location=US",
+    "user_email": "bigquery-runner@minodisk-api.iam.gserviceaccount.com",
+    "configuration": {
+      "query": {
+        "query": "select\n    en_label,\n    labels,\nfrom\n    `bigquery-public-data.wikipedia.wikidata`\nwhere\n    array_length(labels) < 4\nlimit\n    580\n",
+        "destinationTable": {
+          "projectId": "minodisk-api",
+          "datasetId": "_974002322e1183b3df64c0f31d9b6832d25246ef",
+          "tableId": "anonbac154daaa302350b8236748cd3b884dce62d628"
+        },
+        "writeDisposition": "WRITE_TRUNCATE",
+        "priority": "INTERACTIVE",
+        "useLegacySql": false
+      },
+      "jobType": "QUERY"
+    },
+    "jobReference": {
+      "projectId": "minodisk-api",
+      "jobId": "7a72032d-62b1-4d42-89d1-1ad4df110852",
+      "location": "US"
+    },
+    "statistics": {
+      "creationTime": "1654995136625",
+      "startTime": "1654995136675",
+      "endTime": "1654995136855",
+      "totalBytesProcessed": "0",
+      "query": {
+        "totalBytesProcessed": "0",
+        "totalBytesBilled": "0",
+        "cacheHit": true,
+        "statementType": "SELECT"
+      }
+    },
+    "status": { "state": "DONE" }
+  },
+  "table": {
+    "kind": "bigquery#table",
+    "etag": "b70OHl2Vt9eT+xuRU2lDig==",
+    "id": "minodisk-api:_974002322e1183b3df64c0f31d9b6832d25246ef.anonbac154daaa302350b8236748cd3b884dce62d628",
+    "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/minodisk-api/datasets/_974002322e1183b3df64c0f31d9b6832d25246ef/tables/anonbac154daaa302350b8236748cd3b884dce62d628",
+    "tableReference": {
+      "projectId": "minodisk-api",
+      "datasetId": "_974002322e1183b3df64c0f31d9b6832d25246ef",
+      "tableId": "anonbac154daaa302350b8236748cd3b884dce62d628"
+    },
+    "schema": {
+      "fields": [
+        { "name": "en_label", "type": "STRING", "mode": "NULLABLE" },
+        {
+          "name": "labels",
+          "type": "RECORD",
+          "mode": "REPEATED",
+          "fields": [
+            { "name": "language", "type": "STRING", "mode": "NULLABLE" },
+            { "name": "value", "type": "STRING", "mode": "NULLABLE" }
+          ]
+        }
+      ]
+    },
+    "numBytes": "0",
+    "numLongTermBytes": "0",
+    "numRows": "580",
+    "creationTime": "1654873815288",
+    "expirationTime": "1655081536832",
+    "lastModifiedTime": "1654995136832",
+    "type": "TABLE",
+    "location": "US",
+    "numTotalLogicalBytes": "0",
+    "numActiveLogicalBytes": "0",
+    "numLongTermLogicalBytes": "0"
+  },
+  "page": {
+    "hasPrev": false,
+    "hasNext": true,
+    "rowNumberStart": "1",
+    "rowNumberEnd": "100",
+    "numRows": "580"
+  }
+}
