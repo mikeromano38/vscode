@@ -332,7 +332,7 @@ Limits the bytes billed for this query. Queries with bytes billed above this lim
 
 |Type|Default|
 |---|---|
-|array|[".bqsql",".bqddl",".bqdml"]|
+|array|[".sql",".bqsql",".bqddl",".bqdml"]|
 
 List of file extensions for which the query is to be validated when the file is modified.
 

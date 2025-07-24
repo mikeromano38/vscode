@@ -39,6 +39,7 @@
   "icon": "out/assets/icon.png",
   "activationEvents": [
     "workspaceContains:**/*.bqsql",
+    "workspaceContains:**/*.sql",
     "workspaceContains:**/*.bqddl",
     "workspaceContains:**/*.bqdml",
     "onLanguage:bigquery",
@@ -275,6 +276,7 @@
             "type": "string"
           },
           "default": [
+            ".sql",
             ".bqsql",
             ".bqddl",
             ".bqdml"
