@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { BigQueryTableComponent, BigQueryTableMetadata } from './bigquery-table.component';
 
+
 declare const acquireVsCodeApi: any;
 
 @Component({
@@ -96,5 +97,13 @@ export class AppComponent implements OnInit {
 
   parseCSV(text: string): string[][] {
     return text.split('\n').map(row => row.split(','));
+  }
+
+  switchToTable() {
+    this.viewType = 'bigquery-table';
+  }
+
+  switchToCSV() {
+    this.viewType = 'csv';
   }
 }

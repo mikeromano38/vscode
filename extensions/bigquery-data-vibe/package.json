@@ -102,6 +102,12 @@
         "command": "bigquery.openTable",
         "title": "Open Table",
         "category": "BigQuery"
+      },
+
+      {
+        "command": "bigquery.debugAuth",
+        "title": "Debug Authentication",
+        "category": "BigQuery"
       }
     ],
     "menus": {

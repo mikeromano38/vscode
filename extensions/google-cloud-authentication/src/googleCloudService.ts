@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from 'vscode';
+import { GOOGLE_CLOUD_SCOPES, GOOGLE_CLOUD_AUTH_PROVIDER, CONFIG_SECTIONS } from './shared-constants';
 
 export interface GoogleCloudProject {
 	projectId: string;
@@ -33,7 +34,7 @@ export class GoogleCloudService {
 	 */
 	public async getAccessToken(): Promise<string | undefined> {
 		try {
-			const sessions = await vscode.authentication.getSession('google-cloud', ['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'], { silent: true });
+			const sessions = await vscode.authentication.getSession(GOOGLE_CLOUD_AUTH_PROVIDER, GOOGLE_CLOUD_SCOPES, { silent: true });
 			return sessions?.accessToken;
 		} catch (error) {
 			console.error('Failed to get access token:', error);
@@ -45,8 +46,8 @@ export class GoogleCloudService {
 	 * Get the current Google Cloud project information
 	 */
 	public async getCurrentProject(): Promise<GoogleCloudProject | undefined> {
-		const projectId = vscode.workspace.getConfiguration('google-cloud').get('projectId', '');
-		const region = vscode.workspace.getConfiguration('google-cloud').get('region', 'us-central1');
+		const projectId = vscode.workspace.getConfiguration(CONFIG_SECTIONS.GOOGLE_CLOUD).get('projectId', '');
+		const region = vscode.workspace.getConfiguration(CONFIG_SECTIONS.GOOGLE_CLOUD).get('region', 'us-central1');
 		
 		if (projectId) {
 			return { projectId, region };
@@ -59,8 +60,8 @@ export class GoogleCloudService {
 	 * Set the current Google Cloud project
 	 */
 	public async setCurrentProject(projectId: string, region: string = 'us-central1'): Promise<void> {
-		await vscode.workspace.getConfiguration('google-cloud').update('projectId', projectId, vscode.ConfigurationTarget.Global);
-		await vscode.workspace.getConfiguration('google-cloud').update('region', region, vscode.ConfigurationTarget.Global);
+		await vscode.workspace.getConfiguration(CONFIG_SECTIONS.GOOGLE_CLOUD).update('projectId', projectId, vscode.ConfigurationTarget.Global);
+		await vscode.workspace.getConfiguration(CONFIG_SECTIONS.GOOGLE_CLOUD).update('region', region, vscode.ConfigurationTarget.Global);
 	}
 
 	/**
@@ -68,7 +69,7 @@ export class GoogleCloudService {
 	 */
 	public async isAuthenticated(): Promise<boolean> {
 		try {
-			const sessions = await vscode.authentication.getSession('google-cloud', ['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'], { silent: true });
+			const sessions = await vscode.authentication.getSession(GOOGLE_CLOUD_AUTH_PROVIDER, GOOGLE_CLOUD_SCOPES, { silent: true });
 			return !!sessions;
 		} catch (error) {
 			return false;
@@ -80,7 +81,7 @@ export class GoogleCloudService {
 	 */
 	public async authenticate(): Promise<boolean> {
 		try {
-			const session = await vscode.authentication.getSession('google-cloud', ['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'], { createIfNone: true });
+			const session = await vscode.authentication.getSession(GOOGLE_CLOUD_AUTH_PROVIDER, GOOGLE_CLOUD_SCOPES, { createIfNone: true });
 			return !!session;
 		} catch (error) {
 			console.error('Authentication failed:', error);
@@ -95,7 +96,7 @@ export class GoogleCloudService {
 		try {
 			// Note: VS Code doesn't provide a direct way to get all sessions
 			// This is a limitation - we can only sign out the current session
-			const session = await vscode.authentication.getSession('google-cloud', ['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'], { silent: true });
+			const session = await vscode.authentication.getSession(GOOGLE_CLOUD_AUTH_PROVIDER, GOOGLE_CLOUD_SCOPES, { silent: true });
 			if (session) {
 				// VS Code doesn't provide a direct removeSession method
 				// The session will be cleared when the user signs out through the extension

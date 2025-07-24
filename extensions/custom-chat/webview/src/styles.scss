@@ -1,0 +1,112 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-foreground);
+  background-color: var(--vscode-editor-background);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* VS Code theme variables */
+:root {
+  --vscode-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  --vscode-font-size: 13px;
+  --vscode-foreground: #cccccc;
+  --vscode-editor-background: #1e1e1e;
+  --vscode-button-background: #0e639c;
+  --vscode-button-foreground: #ffffff;
+  --vscode-button-hoverBackground: #1177bb;
+  --vscode-button-secondaryBackground: #3a3d41;
+  --vscode-button-secondaryForeground: #cccccc;
+  --vscode-button-secondaryHoverBackground: #45494e;
+  --vscode-input-background: #3c3c3c;
+  --vscode-input-foreground: #cccccc;
+  --vscode-input-border: #3c3c3c;
+  --vscode-focusBorder: #007acc;
+  --vscode-panel-border: #474747;
+  --vscode-textBlockQuote-background: #7a7a7a;
+  --vscode-textBlockQuote-border: #454545;
+  --vscode-errorForeground: #f48771;
+  --vscode-errorBackground: #5a1d1d;
+  --vscode-progressBar-background: #007acc;
+  --vscode-descriptionForeground: #cccccc80;
+}
+
+/* Light theme overrides */
+[data-vscode-theme-kind="vscode-light"] {
+  --vscode-foreground: #616161;
+  --vscode-editor-background: #ffffff;
+  --vscode-button-background: #007acc;
+  --vscode-button-foreground: #ffffff;
+  --vscode-button-hoverBackground: #005a9e;
+  --vscode-button-secondaryBackground: #e7e7e7;
+  --vscode-button-secondaryForeground: #616161;
+  --vscode-button-secondaryHoverBackground: #d4d4d4;
+  --vscode-input-background: #ffffff;
+  --vscode-input-foreground: #616161;
+  --vscode-input-border: #cccccc;
+  --vscode-panel-border: #e7e7e7;
+  --vscode-textBlockQuote-background: #f3f3f3;
+  --vscode-textBlockQuote-border: #cccccc;
+  --vscode-errorForeground: #a1260d;
+  --vscode-errorBackground: #f1f1f1;
+  --vscode-descriptionForeground: #61616180;
+}
+
+/* High contrast theme overrides */
+[data-vscode-theme-kind="vscode-high-contrast"] {
+  --vscode-foreground: #ffffff;
+  --vscode-editor-background: #000000;
+  --vscode-button-background: #007acc;
+  --vscode-button-foreground: #ffffff;
+  --vscode-button-hoverBackground: #005a9e;
+  --vscode-button-secondaryBackground: #3a3a3a;
+  --vscode-button-secondaryForeground: #ffffff;
+  --vscode-button-secondaryHoverBackground: #4a4a4a;
+  --vscode-input-background: #000000;
+  --vscode-input-foreground: #ffffff;
+  --vscode-input-border: #6fc3df;
+  --vscode-panel-border: #6fc3df;
+  --vscode-textBlockQuote-background: #1a1a1a;
+  --vscode-textBlockQuote-border: #6fc3df;
+  --vscode-errorForeground: #f48771;
+  --vscode-errorBackground: #5a1d1d;
+  --vscode-descriptionForeground: #ffffff80;
+}
+
+/* Sidebar-specific adjustments */
+.app-container {
+  min-width: 300px;
+  max-width: 100%;
+}
+
+/* Responsive adjustments for narrow sidebar */
+@media (max-width: 400px) {
+  .header .controls {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .header .btn {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  
+  .input-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .send-btn {
+    height: auto;
+    min-height: 40px;
+  }
+} 

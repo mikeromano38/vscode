@@ -369,7 +369,7 @@ class ChatStatusDashboard extends Disposable {
 			}
 
 			if (this.chatEntitlementService.entitlement === ChatEntitlement.Free && (Number(chatQuota?.percentRemaining) <= 25 || Number(completionsQuota?.percentRemaining) <= 25)) {
-				const upgradeProButton = disposables.add(new Button(this.element, { ...defaultButtonStyles, hoverDelegate: nativeHoverDelegate, secondary: canUseCopilot(this.chatEntitlementService) /* use secondary color when copilot can still be used */ }));
+				const upgradeProButton = disposables.add(new Button(this.element, { ...defaultButtonStyles, secondary: canUseCopilot(this.chatEntitlementService) /* use secondary color when copilot can still be used */ }));
 				upgradeProButton.label = localize('upgradeToCopilotPro', "Upgrade to Copilot Pro");
 				disposables.add(upgradeProButton.onDidClick(() => this.runCommandAndClose('workbench.action.chat.upgradePlan')));
 			}
@@ -442,6 +442,13 @@ class ChatStatusDashboard extends Disposable {
 			const newUser = isNewUser(this.chatEntitlementService);
 			const disabled = this.chatEntitlementService.sentiment.disabled || this.chatEntitlementService.sentiment.untrusted;
 			const signedOut = this.chatEntitlementService.entitlement === ChatEntitlement.Unknown;
+			
+			// Skip sign-in prompt for custom chat extension
+			if (product.defaultChatAgent?.extensionId === 'custom-chat-extension') {
+				// Don't show sign-in prompt for custom chat
+				return this.element;
+			}
+			
 			if (newUser || signedOut || disabled) {
 				addSeparator();
 

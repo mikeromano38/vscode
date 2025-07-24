@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { SharedAuthService } from './sharedAuthService';
 
 export interface BigQueryDataset {
   datasetId: string;
@@ -58,21 +59,16 @@ export class BigQueryService {
 
   async authenticate(): Promise<boolean> {
     try {
-      // Try to get existing session first - don't create a new one
-      // Request BigQuery-specific scopes to ensure we have the right permissions
-      const session = await vscode.authentication.getSession('google-cloud', [
-        'https://www.googleapis.com/auth/cloud-platform',
-        'https://www.googleapis.com/auth/bigquery.readonly'
-      ], { createIfNone: false });
+      const session = await SharedAuthService.getInstance().getSession();
       
       if (session) {
         this.accessToken = session.accessToken;
-        console.log('Using existing Google Cloud session with BigQuery access');
+        console.log('Using shared Google Cloud session with BigQuery access');
         console.log('Session scopes:', session.scopes);
         return true;
       }
       
-      console.log('No existing Google Cloud session found');
+      console.log('No shared Google Cloud session found');
       return false;
     } catch (error) {
       console.error('Authentication failed:', error);

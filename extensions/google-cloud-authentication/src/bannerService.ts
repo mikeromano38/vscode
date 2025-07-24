@@ -5,6 +5,7 @@
 
 import * as vscode from 'vscode';
 import { GoogleCloudAuthenticationProvider } from './googleCloud';
+import { GOOGLE_CLOUD_SCOPES } from './shared-constants';
 
 export class GoogleCloudBannerService implements vscode.Disposable {
 	private readonly _disposable: vscode.Disposable;
@@ -32,7 +33,7 @@ export class GoogleCloudBannerService implements vscode.Disposable {
 		this.hideCurrentBanner();
 
 		// Check if we already have a valid session
-		const sessions = await this.authProvider.getSessions(['https://www.googleapis.com/auth/cloud-platform']);
+		const sessions = await this.authProvider.getSessions([...GOOGLE_CLOUD_SCOPES]);
 		if (sessions.length > 0) {
 			return; // Already authenticated
 		}
@@ -58,7 +59,7 @@ export class GoogleCloudBannerService implements vscode.Disposable {
 	// Project selection is now handled through settings, not banners
 
 	private async updateBannerVisibility(): Promise<void> {
-		const sessions = await this.authProvider.getSessions(['https://www.googleapis.com/auth/cloud-platform']);
+		const sessions = await this.authProvider.getSessions([...GOOGLE_CLOUD_SCOPES]);
 		
 		if (sessions.length === 0) {
 			// No sessions, show authentication banner

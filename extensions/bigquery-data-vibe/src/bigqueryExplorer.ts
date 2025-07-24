@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { BigQueryService } from './bigqueryService';
+import { CONFIG_SECTIONS } from './shared-constants';
 
 export class BigQueryExplorerProvider implements vscode.TreeDataProvider<BigQueryTreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<BigQueryTreeItem | undefined | null | void> = new vscode.EventEmitter<BigQueryTreeItem | undefined | null | void>();
@@ -121,7 +122,7 @@ export class BigQueryExplorerProvider implements vscode.TreeDataProvider<BigQuer
   private async getProjects(): Promise<BigQueryTreeItem[]> {
     console.log('getProjects called');
     try {
-      const projects = vscode.workspace.getConfiguration('bigquery').get<any[]>('projects') || [];
+      const projects = vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).get<any[]>('projects') || [];
       console.log('Projects from config:', projects);
       
       if (projects.length === 0) {

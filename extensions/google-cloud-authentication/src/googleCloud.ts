@@ -10,6 +10,7 @@ import { Keychain } from './common/keychain';
 import { arrayEquals } from './common/utils';
 import { Log } from './common/logger';
 import { crypto } from './node/crypto';
+import { CONFIG_SECTIONS } from './shared-constants';
 
 interface SessionData {
 	id: string;
@@ -61,8 +62,7 @@ export class GoogleCloudAuthenticationProvider implements vscode.AuthenticationP
 	private readonly _userInfoUri = 'https://www.googleapis.com/oauth2/v2/userinfo';
 
 	constructor(
-		private readonly context: vscode.ExtensionContext,
-		private readonly uriHandler: UriEventHandler
+		private readonly context: vscode.ExtensionContext
 	) {
 		this._logger = new Log('GoogleCloudAuth');
 		this._keychain = new Keychain(context, 'google-cloud-auth');
@@ -680,8 +680,8 @@ export class GoogleCloudAuthenticationProvider implements vscode.AuthenticationP
 
 	// Public method to get current project information
 	async getCurrentProject(): Promise<{ projectId: string; region: string } | undefined> {
-		const projectId = vscode.workspace.getConfiguration('google-cloud').get('projectId', '');
-		const region = vscode.workspace.getConfiguration('google-cloud').get('region', 'us-central1');
+		const projectId = vscode.workspace.getConfiguration(CONFIG_SECTIONS.GOOGLE_CLOUD).get('projectId', '');
+		const region = vscode.workspace.getConfiguration(CONFIG_SECTIONS.GOOGLE_CLOUD).get('region', 'us-central1');
 		
 		if (projectId) {
 			return { projectId, region };

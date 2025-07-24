@@ -1,0 +1,126 @@
+{
+  "name": "custom-chat-extension",
+  "displayName": "Custom Chat",
+  "description": "A webview-based custom chat implementation for VS Code with Google Cloud Conversational Analytics",
+  "version": "0.0.1",
+  "publisher": "custom",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "custom-chat.openChat",
+        "title": "Open DataVibe",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.configureProject",
+        "title": "Configure Google Cloud Project",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.testExtension",
+        "title": "Test DataVibe Extension",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.testDataSources",
+        "title": "Test Data Sources",
+        "category": "DataVibe"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "custom-chat.openChat",
+          "when": "true"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "custom-chat.configureProject",
+          "when": "view == customChatView",
+          "group": "navigation"
+        },
+        {
+          "command": "custom-chat.testExtension",
+          "when": "view == customChatView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "datavibe",
+          "title": "DataVibe",
+          "icon": "$(database)"
+        }
+      ]
+    },
+    "views": {
+      "datavibe": [
+        {
+          "id": "customChatView",
+          "name": "Chat",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "DataVibe",
+      "properties": {
+        "custom.chat.completions.advanced": {
+          "type": "object",
+          "default": {},
+          "description": "Advanced settings for completions"
+        },
+        "custom.chat.completions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable chat completions"
+        },
+        "custom.chat.nextEditSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable next edit suggestions"
+        },
+        "customChat.enablePythonAnalysis": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Python analysis in Conversational Analytics API"
+        },
+        "customChat.dataSources": {
+          "type": "object",
+          "default": {},
+          "description": "Custom data sources configuration for Conversational Analytics API"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "npm run compile:extension && npm run compile:webview",
+    "compile:extension": "tsc -p ./",
+    "compile:webview": "cd webview && npm install && npm run build",
+    "watch": "npm run watch:extension",
+    "watch:extension": "tsc -watch -p ./",
+    "watch:webview": "cd webview && npm run watch",
+    "clean": "rimraf out",
+    "build": "npm run clean && npm run compile",
+    "build:webview": "cd webview && npm run build",
+    "install:webview": "cd webview && npm install"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.99.0",
+    "@types/node": "16.x",
+    "typescript": "^5.0.0",
+    "rimraf": "^5.0.0"
+  }
+} 

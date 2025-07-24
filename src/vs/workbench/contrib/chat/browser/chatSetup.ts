@@ -636,6 +636,15 @@ class ChatSetup {
 		const dialogSkipped = this.skipDialogOnce;
 		this.skipDialogOnce = false;
 
+		// Skip authentication for custom chat extension
+		if (product.defaultChatAgent?.extensionId === 'custom-chat-extension') {
+			// For custom chat, we skip all authentication and just show the chat
+			if (!options?.disableChatViewReveal) {
+				showCopilotView(this.viewsService, this.layoutService);
+			}
+			return { dialogSkipped: true, success: true };
+		}
+
 		const trusted = await this.workspaceTrustRequestService.requestWorkspaceTrust({
 			message: localize('copilotWorkspaceTrust', "Copilot is currently only supported in trusted workspaces.")
 		});

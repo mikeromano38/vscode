@@ -3,20 +3,22 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { BigQueryExplorerProvider, BigQueryTreeItem } from './bigqueryExplorer';
 import { BigQueryService, BigQueryTableMetadata } from './bigqueryService';
+import { SharedAuthService } from './sharedAuthService';
+import { GOOGLE_CLOUD_SCOPES, GOOGLE_CLOUD_AUTH_PROVIDER, CONFIG_SECTIONS } from './shared-constants';
 
 async function autoConfigureProject(bigQueryService: BigQueryService): Promise<void> {
   console.log('Auto-configuring project from Google Cloud extension...');
   
   try {
     // Try to get project from google-cloud configuration
-    const googleCloudConfig = vscode.workspace.getConfiguration('google-cloud');
+    const googleCloudConfig = vscode.workspace.getConfiguration(CONFIG_SECTIONS.GOOGLE_CLOUD);
     const projectId = googleCloudConfig.get<string>('projectId');
     
     if (projectId) {
       console.log(`Found Google Cloud project: ${projectId}`);
       
       // Check if this project is already in our list
-      const currentProjects = vscode.workspace.getConfiguration('bigquery').get<any[]>('projects') || [];
+        const currentProjects = vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).get<any[]>('projects') || [];
       const projectExists = currentProjects.some(p => p.projectId === projectId);
       
       if (!projectExists) {
@@ -27,7 +29,7 @@ async function autoConfigureProject(bigQueryService: BigQueryService): Promise<v
           enabled: true
         });
         
-        await vscode.workspace.getConfiguration('bigquery').update('projects', currentProjects, vscode.ConfigurationTarget.Global);
+          await vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).update('projects', currentProjects, vscode.ConfigurationTarget.Global);
         console.log(`BigQuery project auto-configured: ${projectId}`);
       }
       return;
@@ -35,7 +37,7 @@ async function autoConfigureProject(bigQueryService: BigQueryService): Promise<v
     
     // If no project in config, try to get it from authentication sessions
     console.log('No project in config, checking authentication sessions...');
-    const session = await vscode.authentication.getSession('google-cloud', ['https://www.googleapis.com/auth/bigquery.readonly'], { createIfNone: false });
+    const session = await vscode.authentication.getSession(GOOGLE_CLOUD_AUTH_PROVIDER, GOOGLE_CLOUD_SCOPES, { createIfNone: false });
     
     if (session) {
       console.log(`Found Google Cloud session: ${session.account.label}`);
@@ -47,7 +49,7 @@ async function autoConfigureProject(bigQueryService: BigQueryService): Promise<v
         console.log(`Extracted project from email: ${projectFromEmail}`);
         
         // Check if this project is already in our list
-        const currentProjects = vscode.workspace.getConfiguration('bigquery').get<any[]>('projects') || [];
+        const currentProjects = vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).get<any[]>('projects') || [];
         const projectExists = currentProjects.some(p => p.projectId === projectFromEmail);
         
         if (!projectExists) {
@@ -110,10 +112,7 @@ export function activate(context: vscode.ExtensionContext) {
         console.log('[DEBUG] Test command called');
         
         // Test authentication
-        const session = await vscode.authentication.getSession('google-cloud', [
-          'https://www.googleapis.com/auth/cloud-platform',
-          'https://www.googleapis.com/auth/bigquery.readonly'
-        ], { createIfNone: false });
+        const session = await vscode.authentication.getSession(GOOGLE_CLOUD_AUTH_PROVIDER, GOOGLE_CLOUD_SCOPES, { createIfNone: false });
         
         if (session) {
           console.log('[DEBUG] Test - Found session:', session.account.label);
@@ -128,7 +127,7 @@ export function activate(context: vscode.ExtensionContext) {
           // Test a simple BigQuery API call
           if (authenticated) {
             try {
-              const projects = vscode.workspace.getConfiguration('bigquery').get<any[]>('projects') || [];
+              const projects = vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).get<any[]>('projects') || [];
               if (projects.length > 0) {
                 const firstProject = projects[0];
                 console.log('[DEBUG] Test - Testing API call with project:', firstProject.projectId);
@@ -253,34 +252,34 @@ export function activate(context: vscode.ExtensionContext) {
         // Set up the webview with Angular
         panel.webview.html = getHtmlForWebview(panel.webview, context);
 
-        // Handle messages from the webview
-        panel.webview.onDidReceiveMessage(async message => {
-          if (message.type === 'ready') {
-            try {
-              // Fetch table metadata
-              const metadata = await bigQueryService.getTableMetadata(
-                savedTab.projectId,
-                savedTab.datasetId,
-                savedTab.tableId
-              );
+                  // Handle messages from the webview
+          panel.webview.onDidReceiveMessage(async message => {
+            if (message.type === 'ready') {
+              try {
+                // Fetch table metadata
+                const metadata = await bigQueryService.getTableMetadata(
+                  savedTab.projectId,
+                  savedTab.datasetId,
+                  savedTab.tableId
+                );
 
-              // Send metadata to the webview
-              panel.webview.postMessage({
-                type: 'tableMetadata',
-                metadata: metadata
-              });
-            } catch (error) {
-              console.error('Error loading table metadata:', error);
-              panel.webview.postMessage({
-                type: 'tableError',
-                error: `Failed to load table metadata: ${error}`
-              });
+                // Send metadata to the webview
+                panel.webview.postMessage({
+                  type: 'tableMetadata',
+                  metadata: metadata
+                });
+              } catch (error) {
+                console.error('Error loading table metadata:', error);
+                panel.webview.postMessage({
+                  type: 'tableError',
+                  error: `Failed to load table metadata: ${error}`
+                });
+              }
+            } else if (message.type === 'revealInExplorer') {
+              console.log(`[DEBUG] Received revealInExplorer message from restored tab:`, message);
+              await revealTableInExplorer(message.projectId, message.datasetId, message.tableId);
             }
-          } else if (message.type === 'revealInExplorer') {
-            console.log(`[DEBUG] Received revealInExplorer message from restored tab:`, message);
-            await revealTableInExplorer(message.projectId, message.datasetId, message.tableId);
-          }
-        });
+          });
 
         // Track the panel
         openTableTabs.set(savedTab.id, panel);
@@ -330,24 +329,7 @@ export function activate(context: vscode.ExtensionContext) {
       try {
         console.log('[DEBUG] bigquery.signIn command called');
         
-        // Check for existing sessions first
-        const existingSession = await vscode.authentication.getSession('google-cloud', [
-          'https://www.googleapis.com/auth/cloud-platform',
-          'https://www.googleapis.com/auth/bigquery.readonly'
-        ], { createIfNone: false });
-        
-        if (existingSession) {
-          console.log('[DEBUG] Found existing session');
-          console.log('[DEBUG] Session scopes:', existingSession.scopes);
-          console.log('[DEBUG] Session account:', existingSession.account.label);
-        } else {
-          console.log('[DEBUG] No existing session found');
-        }
-        
-        const session = await vscode.authentication.getSession('google-cloud', [
-          'https://www.googleapis.com/auth/cloud-platform',
-          'https://www.googleapis.com/auth/bigquery.readonly'
-        ], { createIfNone: true });
+        const session = await SharedAuthService.getInstance().getSession();
         
         if (session) {
           console.log('[DEBUG] Authentication successful');
@@ -398,7 +380,7 @@ export function activate(context: vscode.ExtensionContext) {
           value: projectId
         });
 
-        const currentProjects = vscode.workspace.getConfiguration('bigquery').get<any[]>('projects') || [];
+        const currentProjects = vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).get<any[]>('projects') || [];
         
         // Check if project already exists
         const projectExists = currentProjects.some(p => p.projectId === projectId);
@@ -414,7 +396,7 @@ export function activate(context: vscode.ExtensionContext) {
           enabled: true
         });
 
-        await vscode.workspace.getConfiguration('bigquery').update('projects', currentProjects, vscode.ConfigurationTarget.Global);
+        await vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).update('projects', currentProjects, vscode.ConfigurationTarget.Global);
         bigQueryExplorerProvider.refresh();
         vscode.window.showInformationMessage(`Project ${projectId} added successfully`);
       }
@@ -540,12 +522,12 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('bigquery.disableProject', async (item: BigQueryTreeItem) => {
       if (item.type === 'project') {
-        const currentProjects = vscode.workspace.getConfiguration('bigquery').get<any[]>('projects') || [];
+        const currentProjects = vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).get<any[]>('projects') || [];
         const projectIndex = currentProjects.findIndex(p => p.projectId === item.id);
         
         if (projectIndex !== -1) {
           currentProjects[projectIndex].enabled = false;
-          await vscode.workspace.getConfiguration('bigquery').update('projects', currentProjects, vscode.ConfigurationTarget.Global);
+          await vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).update('projects', currentProjects, vscode.ConfigurationTarget.Global);
           bigQueryExplorerProvider.refresh();
           vscode.window.showInformationMessage(`Project ${item.label} disabled`);
         }
@@ -563,10 +545,10 @@ export function activate(context: vscode.ExtensionContext) {
         );
         
         if (result === 'Yes') {
-          const currentProjects = vscode.workspace.getConfiguration('bigquery').get<any[]>('projects') || [];
+          const currentProjects = vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).get<any[]>('projects') || [];
           const updatedProjects = currentProjects.filter(p => p.projectId !== item.id);
           
-          await vscode.workspace.getConfiguration('bigquery').update('projects', updatedProjects, vscode.ConfigurationTarget.Global);
+          await vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).update('projects', updatedProjects, vscode.ConfigurationTarget.Global);
           bigQueryExplorerProvider.refresh();
           vscode.window.showInformationMessage(`Project ${item.label} removed`);
         }
@@ -575,16 +557,14 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // Debug authentication command
+
   context.subscriptions.push(
     vscode.commands.registerCommand('bigquery.debugAuth', async () => {
       try {
         console.log('[DEBUG] Debug authentication command called');
         
-        // Check if the google-cloud authentication provider is available
-        const session = await vscode.authentication.getSession('google-cloud', [
-          'https://www.googleapis.com/auth/cloud-platform',
-          'https://www.googleapis.com/auth/bigquery.readonly'
-        ], { createIfNone: false });
+        // Check if the shared authentication service is available
+        const session = await SharedAuthService.getInstance().getSession();
         
         let debugInfo = '=== BigQuery Authentication Debug Info ===\n\n';
         
@@ -602,7 +582,7 @@ export function activate(context: vscode.ExtensionContext) {
           
           if (authenticated) {
             // Test API call
-            const projects = vscode.workspace.getConfiguration('bigquery').get<any[]>('projects') || [];
+            const projects = vscode.workspace.getConfiguration(CONFIG_SECTIONS.BIGQUERY).get<any[]>('projects') || [];
             if (projects.length > 0) {
               try {
                 const datasets = await bigQueryService.listDatasets(projects[0].projectId);
@@ -722,5 +702,9 @@ class CsvTabularEditorProvider implements vscode.CustomTextEditorProvider {
     return html;
   }
 }
+
+
+
+
 
 export function deactivate() {}

@@ -1,0 +1,93 @@
+<div class="chat-container">
+  <!-- Header -->
+  <div class="chat-header">
+    <div class="header-content">
+      <div class="header-title">
+        <span class="ai-icon">🤖</span>
+        <h2>BigQuery Data Assistant</h2>
+      </div>
+      <div class="header-actions">
+        <button class="clear-btn" (click)="clearChat()" title="Clear chat">
+          <span>🗑️</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages Container -->
+  <div class="messages-container" #messagesContainer>
+    <div class="messages-list">
+      <div 
+        *ngFor="let message of messages" 
+        class="message-wrapper"
+        [ngClass]="{
+          'user-message': message.sender === 'user',
+          'assistant-message': message.sender === 'assistant',
+          'loading-message': message.loading,
+          'error-message': message.error
+        }"
+      >
+        <div class="message-content">
+          <div class="message-avatar">
+            <span *ngIf="message.sender === 'user'" class="user-avatar">👤</span>
+            <span *ngIf="message.sender === 'assistant'" class="ai-avatar">🤖</span>
+          </div>
+          <div class="message-bubble">
+            <div class="message-text" [innerHTML]="message.content"></div>
+            <div class="message-timestamp">
+              {{ message.timestamp | date:'shortTime' }}
+            </div>
+            <div class="message-actions" *ngIf="message.sender === 'assistant' && !message.loading">
+              <button class="action-btn" (click)="copyMessage(message)" title="Copy message">
+                📋
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suggestions -->
+  <div class="suggestions-container" *ngIf="messages.length <= 1">
+    <div class="suggestions-title">Quick suggestions:</div>
+    <div class="suggestions-list">
+      <button 
+        *ngFor="let suggestion of suggestions" 
+        class="suggestion-btn"
+        (click)="sendSuggestion(suggestion)"
+      >
+        <span class="suggestion-icon">{{ suggestion.icon }}</span>
+        <span class="suggestion-text">{{ suggestion.text }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Input Container -->
+  <div class="input-container">
+    <div class="input-wrapper">
+      <textarea
+        #messageInput
+        [(ngModel)]="newMessage"
+        (keydown.enter)="onEnterKey($event)"
+        (keydown.escape)="newMessage = ''"
+        placeholder="Ask me about your BigQuery data..."
+        class="message-input"
+        rows="1"
+        [disabled]="isLoading"
+      ></textarea>
+      <button 
+        class="send-btn" 
+        (click)="sendMessage()"
+        [disabled]="!newMessage.trim() || isLoading"
+        title="Send message (Enter)"
+      >
+        <span *ngIf="!isLoading">📤</span>
+        <span *ngIf="isLoading" class="loading-dots">⋯</span>
+      </button>
+    </div>
+    <div class="input-hint">
+      Press Enter to send, Shift+Enter for new line
+    </div>
+  </div>
+</div> 

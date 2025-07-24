@@ -4,12 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from 'vscode';
-import { GoogleCloudAuthenticationProvider, UriEventHandler } from './googleCloud';
+import { GoogleCloudAuthenticationProvider } from './googleCloud';
 import { GoogleCloudBannerService } from './bannerService';
+import { CONFIG_SECTIONS, GOOGLE_CLOUD_SCOPES } from './shared-constants';
 
 export function activate(context: vscode.ExtensionContext) {
 	// Register the Google Cloud authentication provider
-	const googleCloudAuthProvider = new GoogleCloudAuthenticationProvider(context, new UriEventHandler());
+	const googleCloudAuthProvider = new GoogleCloudAuthenticationProvider(context);
 	context.subscriptions.push(googleCloudAuthProvider);
 
 	// Register the banner service for authentication prompts
@@ -21,13 +22,13 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('google-cloud.authenticate', async () => {
 			try {
 				// Check if we already have valid sessions
-				const existingSessions = await googleCloudAuthProvider.getSessions(['https://www.googleapis.com/auth/cloud-platform']);
+				const existingSessions = await googleCloudAuthProvider.getSessions([...GOOGLE_CLOUD_SCOPES]);
 				
 				if (existingSessions.length > 0) {
 					vscode.window.showInformationMessage(`Already authenticated as ${existingSessions[0].account.label}`);
 				} else {
 					// Only create a new session if we don't have any
-					await googleCloudAuthProvider.createSession(['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']);
+					await googleCloudAuthProvider.createSession([...GOOGLE_CLOUD_SCOPES]);
 					vscode.window.showInformationMessage('Successfully authenticated with Google Cloud');
 				}
 				
@@ -39,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 						'Open Settings'
 					);
 					if (result === 'Open Settings') {
-						vscode.commands.executeCommand('google-cloud.openSettings');
+						vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_SECTIONS.GOOGLE_CLOUD);
 					}
 				}
 			} catch (error) {
@@ -53,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('google-cloud.signOut', async () => {
 			try {
-				const sessions = await googleCloudAuthProvider.getSessions(['https://www.googleapis.com/auth/cloud-platform']);
+				const sessions = await googleCloudAuthProvider.getSessions([...GOOGLE_CLOUD_SCOPES]);
 				for (const session of sessions) {
 					await googleCloudAuthProvider.removeSession(session.id);
 				}
@@ -121,7 +122,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('google-cloud.testOAuth', async () => {
 			try {
 				// Check if we already have valid sessions
-				const existingSessions = await googleCloudAuthProvider.getSessions(['https://www.googleapis.com/auth/cloud-platform']);
+				const existingSessions = await googleCloudAuthProvider.getSessions([...GOOGLE_CLOUD_SCOPES]);
 				
 				if (existingSessions.length > 0) {
 					vscode.window.showInformationMessage(`Already authenticated as ${existingSessions[0].account.label}. Testing existing session...`);
@@ -137,7 +138,7 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showInformationMessage('Starting OAuth test... Check the output panel for detailed logs.');
 					
 					// Try to create a session with cloud-platform and user info scopes
-					const session = await googleCloudAuthProvider.createSession(['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']);
+					const session = await googleCloudAuthProvider.createSession([...GOOGLE_CLOUD_SCOPES]);
 					
 					vscode.window.showInformationMessage(`OAuth test successful! User: ${session.account.label}`);
 				}
@@ -170,7 +171,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('google-cloud.openSettings', () => {
 			// Open the settings page for Google Cloud configuration
-			vscode.commands.executeCommand('workbench.action.openSettings', 'google-cloud');
+			vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_SECTIONS.GOOGLE_CLOUD);
 		})
 	);
 
@@ -216,10 +217,10 @@ async function checkAuthenticationOnStartup(
 ) {
 	// Wait a bit for the workbench to be ready
 	setTimeout(async () => {
-		const autoAuthenticate = vscode.workspace.getConfiguration('google-cloud').get('autoAuthenticate', true);
+		const autoAuthenticate = vscode.workspace.getConfiguration(CONFIG_SECTIONS.GOOGLE_CLOUD).get('autoAuthenticate', true);
 		
 		if (autoAuthenticate) {
-			const sessions = await authProvider.getSessions(['https://www.googleapis.com/auth/cloud-platform']);
+			const sessions = await authProvider.getSessions([...GOOGLE_CLOUD_SCOPES]);
 			if (sessions.length === 0) {
 				// Show banner to prompt for authentication
 				bannerService.showAuthenticationBanner();

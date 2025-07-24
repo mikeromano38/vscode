@@ -220,6 +220,11 @@ export class ChatEntitlementService extends Disposable implements IChatEntitleme
 	readonly onDidChangeEntitlement: Event<void>;
 
 	get entitlement(): ChatEntitlement {
+		// Bypass authentication for custom chat extension
+		if (product.defaultChatAgent?.extensionId === 'custom-chat-extension') {
+			return ChatEntitlement.Free; // Treat as authenticated with free tier
+		}
+
 		if (this.contextKeyService.getContextKeyValue<boolean>(ChatContextKeys.Entitlement.pro.key) === true) {
 			return ChatEntitlement.Pro;
 		} else if (this.contextKeyService.getContextKeyValue<boolean>(ChatContextKeys.Entitlement.business.key) === true) {
@@ -419,6 +424,11 @@ interface IQuotas {
 export class ChatEntitlementRequests extends Disposable {
 
 	static providerId(configurationService: IConfigurationService): string {
+		// For custom chat extension, use google-cloud provider instead of the default
+		if (product.defaultChatAgent?.extensionId === 'custom-chat-extension') {
+			return 'google-cloud';
+		}
+
 		if (configurationService.getValue<string | undefined>(`${defaultChat.completionsAdvancedSetting}.authProvider`) === defaultChat.provider.enterprise.id) {
 			return defaultChat.provider.enterprise.id;
 		}
