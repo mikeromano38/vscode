@@ -1,5 +1,5 @@
 // Message content types for the UI
-export type MessageContentType = 'text' | 'schema' | 'data' | 'chart' | 'error' | 'code' | 'markdown';
+export type MessageContentType = 'text' | 'schema' | 'data' | 'chart' | 'visualization' | 'error' | 'code' | 'markdown';
 
 export interface MessageContent {
   type: MessageContentType;

@@ -9,6 +9,8 @@ import { MessageComponent } from './message/message.component';
 import { InputComponent } from './input/input.component';
 import { HeaderComponent } from './header/header.component';
 import { MessageContentComponent } from './message-content/message-content.component';
+import { VegaChartComponent } from './components/vega-chart/vega-chart.component';
+import { VegaTestComponent } from './components/vega-test/vega-test.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { MessageContentComponent } from './message-content/message-content.compo
     MessageComponent,
     InputComponent,
     HeaderComponent,
-    MessageContentComponent
+    MessageContentComponent,
+    VegaChartComponent,
+    VegaTestComponent
   ],
   imports: [
     BrowserModule,

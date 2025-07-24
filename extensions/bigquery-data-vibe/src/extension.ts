@@ -428,10 +428,10 @@ export function activate(context: vscode.ExtensionContext) {
           const tabId = `${item.projectId}.${item.datasetId}.${item.id}`;
           console.log(`[DEBUG] Tab ID created: ${tabId}`);
           
-          // Create a custom webview panel
+          // Create a custom webview panel with full table reference in title
           const panel = vscode.window.createWebviewPanel(
             'bigqueryTableMetadata',
-            `${item.label} - BigQuery Table`,
+            `${item.projectId}.${item.datasetId}.${item.id} - BigQuery Table`,
             vscode.ViewColumn.One,
             {
               enableScripts: true,
@@ -557,6 +557,26 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // Debug authentication command
+
+  // Command to expose open table information for other extensions
+  context.subscriptions.push(
+    vscode.commands.registerCommand('bigquery.getOpenTables', () => {
+      const openTables = Array.from(openTableTabs.entries()).map(([id, panel]) => {
+        const parts = id.split('.');
+        return {
+          id,
+          title: panel.title,
+          projectId: parts[0] || '',
+          datasetId: parts[1] || '',
+          tableId: parts[2] || '',
+          type: 'table'
+        };
+      });
+      
+      console.log('[BigQuery] Exposing open tables:', openTables);
+      return openTables;
+    })
+  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand('bigquery.debugAuth', async () => {

@@ -94,6 +94,58 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
+        vscode.commands.registerCommand('custom-chat.testWebviewDetection', async () => {
+            try {
+                console.log('=== Testing Webview Detection ===');
+                
+                // Test BigQuery table service webview detection specifically
+                const tableService = BigQueryTableService.getInstance();
+                
+                // Test webview detection
+                console.log('Testing webview detection...');
+                const webviewTabs = await tableService.getOpenTableTabs();
+                
+                // Show detailed results
+                let message = `Webview Detection Test Results:\n\n`;
+                message += `Total open table tabs found: ${webviewTabs.length}\n\n`;
+                
+                if (webviewTabs.length > 0) {
+                    message += `Found tables:\n`;
+                    webviewTabs.forEach((tab, index) => {
+                        message += `${index + 1}. ${tab.projectId}.${tab.datasetId}.${tab.tableId}\n`;
+                    });
+                } else {
+                    message += `No BigQuery table webviews detected.\n`;
+                    message += `\nTo test this:\n`;
+                    message += `1. Open a BigQuery table using the BigQuery extension\n`;
+                    message += `2. Run this test command again\n`;
+                }
+                
+                // Also show all current tabs for debugging
+                message += `\n=== All Current Tabs ===\n`;
+                const tabGroups = vscode.window.tabGroups.all;
+                message += `Total tab groups: ${tabGroups.length}\n`;
+                
+                for (const tabGroup of tabGroups) {
+                    message += `\nTab Group (${tabGroup.viewColumn}): ${tabGroup.tabs.length} tabs\n`;
+                    for (const tab of tabGroup.tabs) {
+                        const inputType = tab.input ? tab.input.constructor.name : 'unknown';
+                        const viewType = tab.input && tab.input instanceof vscode.TabInputWebview ? tab.input.viewType : 'N/A';
+                        message += `  - "${tab.label}" (${inputType})${viewType !== 'N/A' ? ` [${viewType}]` : ''}\n`;
+                    }
+                }
+                
+                console.log('Webview detection test results:', message);
+                vscode.window.showInformationMessage(message);
+                
+            } catch (error) {
+                console.error('Webview detection test failed:', error);
+                vscode.window.showErrorMessage(`Webview detection test failed: ${error}`);
+            }
+        })
+    );
+
+    context.subscriptions.push(
         vscode.commands.registerCommand('custom-chat.testExtension', async () => {
             try {
                 console.log('=== Testing DataVibe Extension ===');

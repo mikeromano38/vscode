@@ -108,6 +108,11 @@
         "command": "bigquery.debugAuth",
         "title": "Debug Authentication",
         "category": "BigQuery"
+      },
+      {
+        "command": "bigquery.getOpenTables",
+        "title": "Get Open Tables",
+        "category": "BigQuery"
       }
     ],
     "menus": {

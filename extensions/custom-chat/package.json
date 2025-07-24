@@ -33,6 +33,11 @@
         "command": "custom-chat.testDataSources",
         "title": "Test Data Sources",
         "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.testWebviewDetection",
+        "title": "Test Webview Detection",
+        "category": "DataVibe"
       }
     ],
     "menus": {
