@@ -160,8 +160,7 @@ export function activate(context: vscode.ExtensionContext) {
     try {
       console.log(`[DEBUG] revealTableInExplorer called with: projectId=${projectId}, datasetId=${datasetId}, tableId=${tableId}`);
       
-      // Show progress notification
-      vscode.window.showInformationMessage(`Revealing table: ${tableId}...`);
+
       
       // Get all projects (this is fast, just reads from config)
       const projects = await bigQueryExplorerProvider.getChildren();
@@ -213,7 +212,7 @@ export function activate(context: vscode.ExtensionContext) {
       // Finally, reveal the table with focus and selection
       await treeView.reveal(tableItem, { expand: false, focus: true, select: true });
       
-      vscode.window.showInformationMessage(`✅ Table ${tableId} revealed in explorer!`);
+
       console.log(`[DEBUG] Successfully revealed table ${tableId} in explorer`);
       
     } catch (error) {
@@ -275,9 +274,9 @@ export function activate(context: vscode.ExtensionContext) {
                   error: `Failed to load table metadata: ${error}`
                 });
               }
-            } else if (message.type === 'revealInExplorer') {
-              console.log(`[DEBUG] Received revealInExplorer message from restored tab:`, message);
-              await revealTableInExplorer(message.projectId, message.datasetId, message.tableId);
+            } else if (message.type === 'fetchTableData') {
+              console.log(`[DEBUG] Received fetchTableData message from restored tab:`, message);
+              await fetchTableData(panel, message.projectId, message.datasetId, message.tableId);
             }
           });
 
@@ -302,6 +301,46 @@ export function activate(context: vscode.ExtensionContext) {
       } catch (error) {
         console.error(`Failed to restore tab ${savedTab.title}:`, error);
       }
+    }
+  }
+
+  // Function to fetch table data
+  async function fetchTableData(panel: vscode.WebviewPanel, projectId: string, datasetId: string, tableId: string) {
+    try {
+      console.log(`[DEBUG] Fetching table data for ${projectId}.${datasetId}.${tableId}`);
+      
+      // Get table metadata to extract schema
+      const metadata = await bigQueryService.getTableMetadata(projectId, datasetId, tableId);
+      
+      // Get table data
+      const rows = await bigQueryService.getTableData(projectId, datasetId, tableId, 1000);
+      
+      if (metadata.schema && rows) {
+        // Extract column names from schema
+        const columns = metadata.schema.fields.map((field: any) => field.name);
+        
+        // Extract row data - BigQuery returns rows in format {f: [{v: value}, ...]}
+        const formattedRows = rows.map((row: any) => {
+          return row.f.map((field: any) => field.v);
+        });
+        
+        console.log(`[DEBUG] Fetched ${formattedRows.length} rows with ${columns.length} columns`);
+        
+        // Send data to webview
+        panel.webview.postMessage({
+          type: 'tableData',
+          columns: columns,
+          rows: formattedRows
+        });
+      } else {
+        throw new Error('No data or schema returned from BigQuery');
+      }
+    } catch (error) {
+      console.error('[DEBUG] Error fetching table data:', error);
+      panel.webview.postMessage({
+        type: 'tableDataError',
+        error: `Failed to fetch table data: ${error}`
+      });
     }
   }
 
@@ -470,9 +509,9 @@ export function activate(context: vscode.ExtensionContext) {
                   error: `Failed to load table metadata: ${error}`
                 });
               }
-            } else if (message.type === 'revealInExplorer') {
-              console.log(`[DEBUG] Received revealInExplorer message:`, message);
-              await revealTableInExplorer(message.projectId, message.datasetId, message.tableId);
+            } else if (message.type === 'fetchTableData') {
+              console.log(`[DEBUG] Received fetchTableData message:`, message);
+              await fetchTableData(panel, message.projectId, message.datasetId, message.tableId);
             }
           });
 
@@ -505,7 +544,7 @@ export function activate(context: vscode.ExtensionContext) {
           console.log(`[DEBUG] Calling revealTableInExplorer immediately`);
           revealTableInExplorer(item.projectId!, item.datasetId!, item.id!);
 
-          vscode.window.showInformationMessage(`Opened ${item.type}: ${item.label}`);
+
           console.log(`[DEBUG] Success message shown`);
         } catch (error) {
           console.error('[DEBUG] Error in openTable command:', error);
@@ -575,6 +614,61 @@ export function activate(context: vscode.ExtensionContext) {
       
       console.log('[BigQuery] Exposing open tables:', openTables);
       return openTables;
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('bigquery.revealInExplorer', async () => {
+      // Try to get the active editor from the editor service
+      const activeEditor = vscode.window.activeTextEditor;
+      console.log('[DEBUG] Active text editor:', activeEditor);
+      
+      // Check if we have an active text editor
+      if (activeEditor) {
+        const document = activeEditor.document;
+        console.log('[DEBUG] Active editor document:', {
+          fileName: document.fileName,
+          uri: document.uri.toString(),
+          scheme: document.uri.scheme,
+          languageId: document.languageId
+        });
+
+        // Check if this is a webview panel
+        if (document.uri.scheme === 'webview-panel') {
+          // Try to extract table information from the panel title
+          const panelTitle = document.fileName || '';
+          console.log('[DEBUG] Panel title:', panelTitle);
+          
+          const titleMatch = panelTitle.match(/^(.+)\.(.+)\.(.+) - BigQuery Table$/);
+          
+          if (titleMatch) {
+            const [, projectId, datasetId, tableId] = titleMatch;
+            console.log('[DEBUG] Extracted table info:', { projectId, datasetId, tableId });
+            await revealTableInExplorer(projectId, datasetId, tableId);
+            return;
+          }
+        }
+      }
+      
+      // Try a different approach - check if we can get the active webview panel
+      // Look through our tracked open table tabs
+      console.log('[DEBUG] Checking open table tabs...');
+      for (const [tabId, panel] of openTableTabs.entries()) {
+        console.log('[DEBUG] Tab ID:', tabId, 'Panel active:', panel.active, 'Panel visible:', panel.visible);
+        if (panel.active && panel.visible) {
+          console.log('[DEBUG] Found active BigQuery table panel:', tabId);
+          const parts = tabId.split('.');
+          if (parts.length === 3) {
+            const [projectId, datasetId, tableId] = parts;
+            console.log('[DEBUG] Extracted table info from tab ID:', { projectId, datasetId, tableId });
+            await revealTableInExplorer(projectId, datasetId, tableId);
+            return;
+          }
+        }
+      }
+      
+      // If we get here, either no active editor or not a BigQuery table webview
+      vscode.window.showErrorMessage('No BigQuery table view is currently active');
     })
   );
 

@@ -19,16 +19,7 @@
         "title": "Open DataVibe",
         "category": "DataVibe"
       },
-      {
-        "command": "custom-chat.configureProject",
-        "title": "Configure Google Cloud Project",
-        "category": "DataVibe"
-      },
-      {
-        "command": "custom-chat.testExtension",
-        "title": "Test DataVibe Extension",
-        "category": "DataVibe"
-      },
+
       {
         "command": "custom-chat.testDataSources",
         "title": "Test Data Sources",
@@ -37,6 +28,31 @@
       {
         "command": "custom-chat.testWebviewDetection",
         "title": "Test Webview Detection",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.testAgentService",
+        "title": "Test Developer Agent Service",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.testMCPService",
+        "title": "Test MCP Integration Service",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.refreshMCPService",
+        "title": "Refresh MCP Integration Service",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.testGeminiCliService",
+        "title": "Test Gemini CLI Integration",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.refreshGeminiCliService",
+        "title": "Refresh Gemini CLI Integration",
         "category": "DataVibe"
       }
     ],
@@ -47,18 +63,7 @@
           "when": "true"
         }
       ],
-      "view/title": [
-        {
-          "command": "custom-chat.configureProject",
-          "when": "view == customChatView",
-          "group": "navigation"
-        },
-        {
-          "command": "custom-chat.testExtension",
-          "when": "view == customChatView",
-          "group": "navigation"
-        }
-      ]
+      "view/title": []
     },
     "viewsContainers": {
       "activitybar": [

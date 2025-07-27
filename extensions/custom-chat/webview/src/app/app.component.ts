@@ -15,6 +15,7 @@ import { Component } from '@angular/core';
       flex-direction: column;
       background-color: var(--vscode-editor-background);
       color: var(--vscode-foreground);
+      overflow: hidden;
     }
   `]
 })

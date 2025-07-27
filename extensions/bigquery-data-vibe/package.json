@@ -113,6 +113,12 @@
         "command": "bigquery.getOpenTables",
         "title": "Get Open Tables",
         "category": "BigQuery"
+      },
+      {
+        "command": "bigquery.revealInExplorer",
+        "title": "Reveal in Explorer",
+        "category": "BigQuery",
+        "icon": "$(list-tree)"
       }
     ],
     "menus": {
@@ -153,6 +159,13 @@
           "command": "bigquery.removeProject",
           "when": "view == bigqueryExplorer && viewItem == bigquery-project",
           "group": "inline"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "bigquery.revealInExplorer",
+          "when": "true",
+          "group": "navigation"
         }
       ]
     },

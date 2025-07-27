@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { VscodeApiService } from '../services/vscode-api.service';
+import { TitleService } from '../services/title.service';
 
 @Component({
   selector: 'app-header',
@@ -7,17 +10,7 @@ import { VscodeApiService } from '../services/vscode-api.service';
     <div class="header">
       <div class="title">
         <span class="icon">📊</span>
-        DataVibe
-      </div>
-      <div class="controls">
-        <button class="btn btn-secondary" (click)="configureProject()">
-          <span class="icon">⚙️</span>
-          Configure Project
-        </button>
-        <button class="btn btn-secondary" (click)="testExtension()">
-          <span class="icon">🧪</span>
-          Test Extension
-        </button>
+        {{ currentTitle }}
       </div>
     </div>
   `,
@@ -44,65 +37,30 @@ import { VscodeApiService } from '../services/vscode-api.service';
       font-size: 1.2em;
     }
 
-    .controls {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
-      background-color: var(--vscode-button-background);
-      color: var(--vscode-button-foreground);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background-color 0.2s ease;
-    }
-
-    .btn:hover {
-      background-color: var(--vscode-button-hoverBackground);
-    }
-
-    .btn-secondary {
-      background-color: var(--vscode-button-secondaryBackground);
-      color: var(--vscode-button-secondaryForeground);
-    }
-
-    .btn-secondary:hover {
-      background-color: var(--vscode-button-secondaryHoverBackground);
-    }
-
     .icon {
       font-size: 14px;
     }
   `]
 })
-export class HeaderComponent {
-  constructor(private vscodeApiService: VscodeApiService) {}
+export class HeaderComponent implements OnInit, OnDestroy {
+  currentTitle = 'Untitled';
+  private destroy$ = new Subject<void>();
 
-  configureProject() {
-    if (!this.vscodeApiService.isAvailable()) {
-      console.error('VS Code API not available');
-      return;
-    }
-    this.vscodeApiService.postMessage({
-      command: 'configureProject'
-    });
+  constructor(
+    private vscodeApiService: VscodeApiService,
+    private titleService: TitleService
+  ) {}
+
+  ngOnInit() {
+    this.titleService.title$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(title => {
+        this.currentTitle = title;
+      });
   }
 
-  testExtension() {
-    console.log('Test extension button clicked');
-    if (!this.vscodeApiService.isAvailable()) {
-      console.error('VS Code API not available');
-      return;
-    }
-    this.vscodeApiService.postMessage({
-      command: 'testExtension'
-    });
-    console.log('Test extension message sent');
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 } 

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { ConversationalAnalyticsService } from './conversationalAnalyticsService';
+import { DeveloperAgentService } from './developerAgentService';
 import { ConfigHelper } from './configHelper';
 import { ParsedStreamResponse } from './types/responseTypes';
 import * as path from 'path';
@@ -54,7 +55,10 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
                 
                 switch (message.command) {
                     case 'sendMessage':
-                        console.log('Handling sendMessage with text:', message.text);
+                        console.log('=== Handling sendMessage ===');
+                        console.log('Raw message data:', message.text);
+                        console.log('Message type:', typeof message.text);
+                        console.log('Message length:', message.text?.length);
                         this._handleChatMessage(message.text);
                         return;
                     case 'configureProject':
@@ -152,17 +156,113 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
         }
     }
 
-    private async _handleChatMessage(text: string) {
+    private async _handleChatMessage(messageData: string) {
         if (!this._view) return;
 
         try {
+            // Parse the message data - it could be a simple string or a JSON object with mode info
+            let messageText: string;
+            let mode: 'ask' | 'agent' = 'ask';
+            let context: any = null;
+
+            console.log('=== Parsing message data ===');
+            console.log('Input messageData:', messageData);
+            console.log('Input type:', typeof messageData);
+
+            try {
+                // Try to parse as JSON first
+                const parsedMessage = JSON.parse(messageData);
+                console.log('Successfully parsed JSON:', parsedMessage);
+                messageText = parsedMessage.text || messageData;
+                mode = parsedMessage.mode || 'ask';
+                context = parsedMessage.context || null;
+                console.log('Extracted - messageText:', messageText);
+                console.log('Extracted - mode:', mode);
+                console.log('Extracted - context:', context);
+            } catch (parseError) {
+                // If parsing fails, treat as simple string
+                console.log('JSON parsing failed, treating as simple string');
+                console.log('Parse error:', parseError);
+                messageText = messageData;
+                console.log('Using messageData as messageText:', messageText);
+            }
+
             // Update UI to show processing state
             this._view.webview.postMessage({ command: 'setProcessing', processing: true });
-            this._view.webview.postMessage({ command: 'updateStatus', text: 'Processing request...' });
+            this._view.webview.postMessage({ command: 'updateStatus', text: `Processing ${mode} request...` });
 
             console.log('=== Chat request received ===');
-            console.log('Prompt:', text);
+            console.log('Message text:', messageText);
+            console.log('Mode:', mode);
+            console.log('Context:', context);
 
+            // Handle different modes
+            if (mode === 'agent') {
+                // Handle agent mode
+                await this._handleAgentMode(messageText, context);
+                return;
+            }
+
+            // Handle ask mode (existing logic)
+            await this._handleAskMode(messageText);
+        } catch (error) {
+            console.error('=== Chat error ===');
+            console.error('Error details:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Failed to process chat request';
+            
+            this._view.webview.postMessage({ command: 'addError', text: `❌ **Error**: ${errorMessage}` });
+            this._view.webview.postMessage({ command: 'setProcessing', processing: false });
+        }
+    }
+
+    private async _handleAgentMode(messageText: string, context: any) {
+        if (!this._view) return;
+        
+        try {
+            console.log('=== Handling Agent Mode ===');
+            
+            // Initialize the Developer Agent service
+            const agentService = DeveloperAgentService.getInstance();
+            
+            // Check if agent service is available
+            const isAvailable = await agentService.isAvailable();
+            if (!isAvailable) {
+                this._view.webview.postMessage({ 
+                    command: 'addError', 
+                    text: '❌ **Agent Service Error**: Developer Agent service is not available.' 
+                });
+                this._view.webview.postMessage({ command: 'setProcessing', processing: false });
+                return;
+            }
+
+            this._view.webview.postMessage({ command: 'updateStatus', text: 'Processing with Developer Agent...' });
+
+            // Process the message with the agent service
+            await agentService.processAgentMessage(messageText, context);
+
+            // Add a success message to the chat
+            this._view.webview.postMessage({ 
+                command: 'addMessage', 
+                text: `🤖 **Agent Mode**: Your request has been processed by the Developer Agent service. Check the notifications for details.`,
+                isUser: false
+            });
+
+            this._view.webview.postMessage({ command: 'updateStatus', text: 'Ready' });
+            this._view.webview.postMessage({ command: 'setProcessing', processing: false });
+
+        } catch (error) {
+            console.error('Agent mode error:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Failed to process agent request';
+            
+            this._view.webview.postMessage({ command: 'addError', text: `❌ **Agent Error**: ${errorMessage}` });
+            this._view.webview.postMessage({ command: 'setProcessing', processing: false });
+        }
+    }
+
+    private async _handleAskMode(messageText: string) {
+        if (!this._view) return;
+        
+        try {
             // Get the Google Cloud auth session
             const session = await ConfigHelper.getGoogleCloudSession();
             if (!session) {
@@ -209,18 +309,6 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
 
             // Start streaming response
             this._view.webview.postMessage({ command: 'startStreaming' });
-            
-            // Add a test response to verify the streaming is working
-            console.log('Adding test response to verify streaming...');
-            const testResponse: ParsedStreamResponse = {
-                type: 'text',
-                data: { content: '🔄 **Streaming test**: This is a test response to verify the streaming is working correctly.' },
-                rawResponse: null
-            };
-            this._view.webview.postMessage({ 
-                command: 'addStreamingResponse', 
-                response: testResponse 
-            });
 
             // Create a cancellation token
             const cancellationTokenSource = new vscode.CancellationTokenSource();
@@ -238,7 +326,7 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
             // Stream the response from Conversational Analytics API
             console.log('Getting stream from analytics service...');
             const streamPromise = analyticsService.streamChatResponse(
-                text,
+                messageText,
                 session,
                 dataSources,
                 analysisOptions,
@@ -307,14 +395,14 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
             this._view.webview.postMessage({ command: 'updateStatus', text: 'Ready' });
             this._view.webview.postMessage({ command: 'setProcessing', processing: false });
 
-            console.log('=== Chat request completed ===');
+            console.log('=== Ask mode request completed ===');
 
         } catch (error) {
-            console.error('=== Chat error ===');
+            console.error('=== Ask mode error ===');
             console.error('Error details:', error);
-            const errorMessage = error instanceof Error ? error.message : 'Failed to process chat request';
+            const errorMessage = error instanceof Error ? error.message : 'Failed to process ask request';
             
-            this._view.webview.postMessage({ command: 'addError', text: `❌ **Error**: ${errorMessage}` });
+            this._view.webview.postMessage({ command: 'addError', text: `❌ **Ask Error**: ${errorMessage}` });
             this._view.webview.postMessage({ command: 'setProcessing', processing: false });
         }
     }

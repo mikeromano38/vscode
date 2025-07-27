@@ -2,6 +2,9 @@ import * as vscode from 'vscode';
 import { CustomChatWebviewProvider } from './webviewProvider';
 import { ConfigHelper } from './configHelper';
 import { BigQueryTableService } from './bigqueryTableService';
+import { DeveloperAgentService } from './developerAgentService';
+import { MCPIntegrationService } from './mcpIntegrationService';
+import { GeminiCliService } from './geminiCliService';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('=== DataVibe extension is now active! ===');
@@ -9,6 +12,12 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Extension path:', context.extension.extensionPath);
     console.log('Extension version:', context.extension.packageJSON.version);
 
+    // Initialize MCP integration service
+    const mcpService = MCPIntegrationService.getInstance(context);
+    
+    // Initialize Gemini CLI service
+    const geminiCliService = GeminiCliService.getInstance(context);
+    
     // Register the webview view provider
     context.subscriptions.push(
         CustomChatWebviewProvider.register(context)
@@ -22,19 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
         })
     );
 
-    context.subscriptions.push(
-        vscode.commands.registerCommand('custom-chat.configureProject', async () => {
-            try {
-                const project = await ConfigHelper.promptForBillingProject();
-                if (project) {
-                    vscode.window.showInformationMessage(`✅ Google Cloud project configured: ${project}`);
-                }
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                vscode.window.showErrorMessage(`Error configuring Google Cloud project: ${errorMessage}`);
-            }
-        })
-    );
+
 
     context.subscriptions.push(
         vscode.commands.registerCommand('custom-chat.testDataSources', async () => {
@@ -146,52 +143,197 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('custom-chat.testExtension', async () => {
+        vscode.commands.registerCommand('custom-chat.testAgentService', async () => {
             try {
-                console.log('=== Testing DataVibe Extension ===');
+                console.log('=== Testing Developer Agent Service ===');
                 
-                // Test authentication
-                console.log('Testing authentication...');
-                const session = await ConfigHelper.getGoogleCloudSession();
-                if (session) {
-                    console.log('✅ Authentication working:', session.account.label);
-                    vscode.window.showInformationMessage(`✅ Authentication working: ${session.account.label}`);
-                } else {
-                    console.log('❌ No authentication session found');
-                    vscode.window.showWarningMessage('❌ No authentication session found');
-                    return;
-                }
+                // Test the Developer Agent service
+                const agentService = DeveloperAgentService.getInstance();
                 
-                // Test project configuration
-                console.log('Testing project configuration...');
-                const project = ConfigHelper.getBillingProject();
-                if (project) {
-                    console.log('✅ Project configured:', project);
-                    vscode.window.showInformationMessage(`✅ Project configured: ${project}`);
-                } else {
-                    console.log('❌ No project configured');
-                    vscode.window.showWarningMessage('❌ No project configured');
-                    return;
-                }
+                // Test availability
+                const isAvailable = await agentService.isAvailable();
+                console.log('Agent service available:', isAvailable);
                 
-                // Test data sources
-                console.log('Testing data sources...');
-                const dataSources = await ConfigHelper.getDefaultDataSources();
-                console.log('✅ Data sources:', JSON.stringify(dataSources, null, 2));
-                console.log('✅ Data sources bq:', dataSources.bq);
-                console.log('✅ Data sources table references length:', dataSources.bq?.tableReferences?.length);
-                vscode.window.showInformationMessage(`✅ Data sources configured: ${dataSources.bq?.tableReferences?.length || 0} table references`);
+                // Test configuration
+                const config = await agentService.getConfiguration();
+                console.log('Agent service configuration:', config);
                 
-                vscode.window.showInformationMessage('✅ DataVibe extension test completed successfully!');
+                // Test message processing
+                const testMessage = 'Hello from test command!';
+                console.log('Testing message processing with:', testMessage);
+                
+                await agentService.processAgentMessage(testMessage, { test: true });
+                
+                vscode.window.showInformationMessage(
+                    `✅ Developer Agent Service Test Results:\n` +
+                    `• Available: ${isAvailable ? 'Yes' : 'No'}\n` +
+                    `• Configuration: ${config.serviceType} v${config.version}\n` +
+                    `• Message processing: Success\n\n` +
+                    `Agent service is working correctly!`
+                );
                 
             } catch (error) {
-                console.error('=== Test failed ===');
-                console.error('Error:', error);
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                vscode.window.showErrorMessage(`❌ Test failed: ${errorMessage}`);
+                console.error('Agent service test failed:', error);
+                vscode.window.showErrorMessage(`Agent service test failed: ${error}`);
             }
         })
     );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('custom-chat.testMCPService', async () => {
+            try {
+                console.log('=== Testing MCP Integration Service ===');
+                
+                // Test the MCP integration service
+                const mcpService = MCPIntegrationService.getInstance(context);
+                
+                // Test initialization
+                const isInitialized = await mcpService.initialize();
+                console.log('MCP service initialized:', isInitialized);
+                
+                if (isInitialized) {
+                    // Test server status
+                    const serverInfo = mcpService.getServerInfo();
+                    console.log('MCP server info:', serverInfo);
+                    
+                    // Test available tools
+                    const tools = mcpService.getAvailableTools();
+                    console.log('Available tools:', tools.length);
+                    
+                    vscode.window.showInformationMessage(
+                        `✅ MCP Integration Service Test Results:\n` +
+                        `• Initialized: ${isInitialized ? 'Yes' : 'No'}\n` +
+                        `• Server Running: ${serverInfo?.isRunning ? 'Yes' : 'No'}\n` +
+                        `• Port: ${serverInfo?.port || 'N/A'}\n` +
+                        `• Available Tools: ${tools.length}\n\n` +
+                        `MCP integration is working correctly!`
+                    );
+                } else {
+                    vscode.window.showWarningMessage(
+                        `⚠️ MCP Integration Service Test Results:\n` +
+                        `• Initialized: No\n` +
+                        `• Reason: No BigQuery tables open or toolbox not installed\n\n` +
+                        `To test MCP integration:\n` +
+                        `1. Open a BigQuery table\n` +
+                        `2. Install Google GenAI Toolbox\n` +
+                        `3. Run this test again`
+                    );
+                }
+                
+            } catch (error) {
+                console.error('MCP service test failed:', error);
+                vscode.window.showErrorMessage(`MCP service test failed: ${error}`);
+            }
+        })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('custom-chat.refreshMCPService', async () => {
+            try {
+                console.log('=== Refreshing MCP Integration Service ===');
+                
+                const mcpService = MCPIntegrationService.getInstance(context);
+                const success = await mcpService.refresh();
+                
+                if (success) {
+                    const serverInfo = mcpService.getServerInfo();
+                    const tools = mcpService.getAvailableTools();
+                    
+                    vscode.window.showInformationMessage(
+                        `✅ MCP Integration Refreshed\n` +
+                        `• Server: ${serverInfo?.name}\n` +
+                        `• Status: ${serverInfo?.isRunning ? 'Running' : 'Stopped'}\n` +
+                        `• Tools: ${tools.length} available`
+                    );
+                } else {
+                    vscode.window.showWarningMessage('MCP integration refresh failed');
+                }
+                
+            } catch (error) {
+                console.error('MCP service refresh failed:', error);
+                vscode.window.showErrorMessage(`MCP service refresh failed: ${error}`);
+            }
+        })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('custom-chat.testGeminiCliService', async () => {
+            try {
+                console.log('=== Testing Gemini CLI Integration Service ===');
+                
+                // Test the Gemini CLI service
+                const geminiCliService = GeminiCliService.getInstance(context);
+                
+                // Test initialization
+                const isInitialized = await geminiCliService.initialize();
+                console.log('Gemini CLI service initialized:', isInitialized);
+                
+                if (isInitialized) {
+                    // Test configuration
+                    const config = geminiCliService.getConfiguration();
+                    console.log('Gemini CLI configuration:', config);
+                    
+                    // Test BigQuery integration
+                    console.log('Testing BigQuery integration...');
+                    const testResult = await geminiCliService.testBigQueryIntegration();
+                    console.log('BigQuery integration test result:', testResult);
+                    
+                    vscode.window.showInformationMessage(
+                        `✅ Gemini CLI Integration Service Test Results:\n` +
+                        `• Initialized: ${isInitialized ? 'Yes' : 'No'}\n` +
+                        `• Version: ${config?.version || 'Unknown'}\n` +
+                        `• MCP Servers Configured: ${config?.mcpServersConfigured ? 'Yes' : 'No'}\n` +
+                        `• BigQuery Integration: Tested\n\n` +
+                        `Gemini CLI integration is working correctly!`
+                    );
+                } else {
+                    vscode.window.showWarningMessage(
+                        `⚠️ Gemini CLI Integration Service Test Results:\n` +
+                        `• Initialized: No\n` +
+                        `• Reason: Installation or configuration failed\n\n` +
+                        `To fix:\n` +
+                        `1. Run the installation script: ./scripts/install-toolbox.sh\n` +
+                        `2. Ensure Google Cloud project is configured\n` +
+                        `3. Run this test again`
+                    );
+                }
+                
+            } catch (error) {
+                console.error('Gemini CLI service test failed:', error);
+                vscode.window.showErrorMessage(`Gemini CLI service test failed: ${error}`);
+            }
+        })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('custom-chat.refreshGeminiCliService', async () => {
+            try {
+                console.log('=== Refreshing Gemini CLI Integration Service ===');
+                
+                const geminiCliService = GeminiCliService.getInstance(context);
+                const success = await geminiCliService.initialize();
+                
+                if (success) {
+                    const config = geminiCliService.getConfiguration();
+                    
+                    vscode.window.showInformationMessage(
+                        `✅ Gemini CLI Integration Refreshed\n` +
+                        `• Version: ${config?.version}\n` +
+                        `• MCP Servers: ${config?.mcpServersConfigured ? 'Configured' : 'Not Configured'}\n` +
+                        `• Settings: ${config?.settingsPath}`
+                    );
+                } else {
+                    vscode.window.showWarningMessage('Gemini CLI integration refresh failed');
+                }
+                
+            } catch (error) {
+                console.error('Gemini CLI service refresh failed:', error);
+                vscode.window.showErrorMessage(`Gemini CLI service refresh failed: ${error}`);
+            }
+        })
+    );
+
+
 
     // Register a status bar item to quickly open the chat
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
@@ -204,11 +346,22 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('=== DataVibe extension activated successfully! ===');
     console.log('Available commands:');
     console.log('- custom-chat.openChat: Open DataVibe');
-    console.log('- custom-chat.configureProject: Configure Google Cloud project');
     console.log('- custom-chat.testDataSources: Test data sources configuration');
-    console.log('- custom-chat.testExtension: Test DataVibe functionality');
 }
 
 export function deactivate() {
     console.log('=== DataVibe extension is now deactivated! ===');
+    
+    // Cleanup MCP integration service
+    const mcpService = MCPIntegrationService.getInstance();
+    if (mcpService) {
+        mcpService.cleanup();
+    }
+    
+    // Cleanup Gemini CLI service
+    const geminiCliService = GeminiCliService.getInstance();
+    if (geminiCliService) {
+        // No specific cleanup needed for Gemini CLI service
+        console.log('[GeminiCliService] Cleanup completed');
+    }
 } 

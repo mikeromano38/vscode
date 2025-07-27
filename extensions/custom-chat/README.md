@@ -6,6 +6,8 @@ This extension provides a custom chat interface for VS Code that integrates with
 
 - ✅ **Conversational Analytics API**: Intelligent data analysis using Google's Conversational Analytics API
 - ✅ **BigQuery Integration**: Direct access to BigQuery datasets for analysis
+- ✅ **MCP Integration**: Google GenAI Toolbox MCP server for advanced BigQuery connectivity
+- ✅ **Gemini CLI Integration**: AI-powered BigQuery analysis through Gemini CLI
 - ✅ **Streaming Responses**: Real-time streaming of analysis results
 - ✅ **Rich Output**: Formatted tables, SQL queries, and chart configurations
 - ✅ **Google Cloud Authentication**: Uses existing Google Cloud auth sessions
@@ -25,6 +27,34 @@ Set your Google Cloud project ID in VS Code settings (shared with Google Cloud A
   "google-cloud.projectId": "your-project-id"
 }
 ```
+
+### MCP Integration Setup
+
+The extension includes MCP (Model Context Protocol) integration with Google GenAI Toolbox for enhanced BigQuery connectivity:
+
+#### Quick Setup
+
+Run the installation script:
+```bash
+cd vscode/extensions/custom-chat
+./scripts/install-toolbox.sh
+```
+
+#### Manual Setup
+
+1. **Install Go**: https://golang.org/doc/install
+2. **Install Google GenAI Toolbox**:
+   ```bash
+   go install github.com/googleapis/genai-toolbox@latest
+   ```
+3. **Add Go bin to PATH**:
+   ```bash
+   export PATH=$PATH:$(go env GOPATH)/bin
+   ```
+
+For detailed MCP integration documentation, see [MCP_INTEGRATION.md](./MCP_INTEGRATION.md).
+
+For Gemini CLI integration documentation, see [GEMINI_CLI_INTEGRATION.md](./GEMINI_CLI_INTEGRATION.md).
 
 ### Python Analysis
 
@@ -86,9 +116,12 @@ The extension automatically uses the existing Google Cloud authentication sessio
 ## Usage
 
 1. **Start VS Code**: Run `./scripts/code.sh` from the vscode directory
-2. **Configure Google Cloud Project**: Run "Custom Chat: Configure Google Cloud Project" from the Command Palette
-3. **Open Chat**: Look for the chat interface in VS Code
-4. **Start Analyzing**: Ask questions about your data in natural language
+2. **Setup MCP Integration**: Run the installation script or install manually (see Configuration section)
+3. **Configure Google Cloud Project**: Run "Custom Chat: Configure Google Cloud Project" from the Command Palette
+4. **Open BigQuery Tables**: Open BigQuery tables in VS Code to enable MCP tools
+5. **Test MCP Integration**: Run "DataVibe: Test MCP Integration Service" from Command Palette
+6. **Open Chat**: Look for the chat interface in VS Code
+7. **Start Analyzing**: Ask questions about your data in natural language
 
 ## Error Handling
 
@@ -164,12 +197,28 @@ if __name__ == '__main__':
    - Sign in to Google Cloud in VS Code first
    - Use the BigQuery extension to establish a session
 
-2. **"Backend service error"**
+2. **"Google GenAI Toolbox not found"**
+   - Run the installation script: `./scripts/install-toolbox.sh`
+   - Or install manually: `go install github.com/googleapis/genai-toolbox@latest`
+   - Ensure Go bin directory is in your PATH
+
+3. **"MCP server failed to start"**
+   - Check if port 5000 is available
+   - Verify Google Cloud authentication
+   - Check BigQuery table access permissions
+   - Run "DataVibe: Refresh MCP Integration Service"
+
+4. **"Gemini CLI not found"**
+   - Run the installation script: `./scripts/install-toolbox.sh`
+   - Or install manually: `npm install -g @google/gemini-cli`
+   - Ensure Node.js is installed and in PATH
+
+5. **"Backend service error"**
    - Check your backend URL configuration
    - Verify your backend service is running
    - Check network connectivity
 
-3. **"Timeout"**
+6. **"Timeout"**
    - Increase the timeout setting
    - Check your backend service performance
 

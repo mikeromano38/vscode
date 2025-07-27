@@ -51,34 +51,26 @@ import { VscodeApiService } from '../services/vscode-api.service';
       <!-- Data Content -->
       <div *ngSwitchCase="'data'" class="data-content">
         <div *ngIf="data.bigQueryJob" class="bigquery-job-info">
-          <h3>🔄 Running Query</h3>
+          <h3>Running Query</h3>
           <p><strong>Job ID:</strong> {{ data.bigQueryJob.id }}</p>
           <div *ngIf="data.bigQueryJob.destinationTable" class="destination-table">
             <strong>Destination Table:</strong>
-            <p>{{ data.bigQueryJob.destinationTable.projectId }}.{{ data.bigQueryJob.destinationTable.datasetId }}.{{ data.bigQueryJob.destinationTable.tableId }}</p>
-          </div>
-        </div>
-
-        <div *ngIf="data.query" class="query-info">
-          <h3>Retrieval Query</h3>
-          <p><strong>Query name:</strong> {{ data.query.name }}</p>
-          <p><strong>Question:</strong> {{ data.query.question }}</p>
-          <div *ngIf="data.query.datasources" class="datasources">
-            <strong>Data sources:</strong>
-            <ul>
-              <li *ngFor="let ds of data.query.datasources">{{ ds.name }}</li>
-            </ul>
+            <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ data.bigQueryJob.destinationTable.projectId }}.{{ data.bigQueryJob.destinationTable.datasetId }}.{{ data.bigQueryJob.destinationTable.tableId }}</p>
           </div>
         </div>
 
         <div *ngIf="data.generatedSql" class="sql-content">
           <h3>SQL Generated</h3>
-          <div class="sql-header">
-            <button class="open-sql-button" (click)="openSqlInEditor(data.generatedSql)">
-              📄 Open in SQL Editor
-            </button>
-          </div>
           <pre><code class="sql">{{ data.generatedSql }}</code></pre>
+          
+          <!-- Open in SQL Editor link -->
+          <div class="truncation-message">
+            <p>
+              <a href="#" (click)="openSqlInEditor(data.generatedSql)" class="view-full-link">
+                Open in SQL Editor
+              </a>
+            </p>
+          </div>
         </div>
 
         <div *ngIf="data.data" class="data-table">
@@ -491,30 +483,7 @@ import { VscodeApiService } from '../services/vscode-api.service';
       margin: 4px 0;
     }
 
-    .sql-header {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 8px;
-    }
 
-    .open-sql-button {
-      background-color: var(--vscode-button-background);
-      color: var(--vscode-button-foreground);
-      border: 1px solid var(--vscode-button-border);
-      border-radius: 4px;
-      padding: 6px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .open-sql-button:hover {
-      background-color: var(--vscode-button-hoverBackground);
-    }
-
-    .open-sql-button:active {
-      background-color: var(--vscode-button-activeBackground);
-    }
   `]
 })
 export class MessageContentComponent implements OnInit, AfterViewInit {

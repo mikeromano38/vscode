@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VscodeApiService } from '../services/vscode-api.service';
+import { TitleService } from '../services/title.service';
 import { ParsedStreamResponse, MessageContentType } from '../../types/responseTypes';
 
 export interface ChatMessage {
@@ -26,25 +27,34 @@ declare function acquireVsCodeApi(): any;
         </app-message>
       </div>
       
-      <app-input 
+      <div class="bottom-section">
+        <div class="status" *ngIf="statusMessage">
+          {{ statusMessage }}
+        </div>
+        
+              <app-input 
         [isProcessing]="isProcessing"
-        (sendMessageEvent)="onSendMessage($event)">
+        (sendMessageEvent)="onSendMessage($event)"
+        (modeChangeEvent)="onModeChange($event)">
       </app-input>
-      
-      <div class="status" *ngIf="statusMessage">
-        {{ statusMessage }}
       </div>
     </div>
   `,
   styles: [`
+    :host {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
     .chat-container {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 15px;
       overflow: hidden;
       padding: 15px;
       min-height: 0;
+      height: 100%;
     }
 
     .messages {
@@ -54,8 +64,15 @@ declare function acquireVsCodeApi(): any;
       background-color: var(--vscode-input-background);
       border: 1px solid var(--vscode-input-border);
       border-radius: 4px;
-      min-height: 200px;
-      max-height: 60vh;
+      min-height: 0;
+      margin-bottom: 10px;
+    }
+
+    .bottom-section {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .status {
@@ -70,13 +87,14 @@ declare function acquireVsCodeApi(): any;
     @media (max-width: 400px) {
       .chat-container {
         padding: 10px;
-        gap: 10px;
       }
       
       .messages {
         padding: 6px;
-        min-height: 150px;
-        max-height: 50vh;
+      }
+      
+      .bottom-section {
+        gap: 8px;
       }
       
       .status {
@@ -91,8 +109,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   isProcessing = false;
   statusMessage = '';
   private destroy$ = new Subject<void>();
+  private hasSetTitle = false;
 
-  constructor(private vscodeApiService: VscodeApiService) {}
+  constructor(
+    private vscodeApiService: VscodeApiService,
+    private titleService: TitleService
+  ) {}
 
   ngOnInit() {
     console.log('Chat component initialized');
@@ -151,15 +173,35 @@ Start by configuring your Google Cloud project, then ask questions about your da
     this.messages.push(welcomeMessage);
   }
 
-  onSendMessage(text: string) {
-    if (!text.trim() || this.isProcessing) return;
+  onSendMessage(messageData: string) {
+    if (!messageData || this.isProcessing) return;
 
-    console.log('Sending message:', text.trim());
+    let parsedMessage: any;
+    let displayText: string;
+    let contextItems: any[] = [];
+    let mode: string = 'ask';
+
+    try {
+      // Try to parse as JSON first (new format)
+      parsedMessage = JSON.parse(messageData);
+      displayText = parsedMessage.text || '';
+      contextItems = parsedMessage.context || [];
+      mode = parsedMessage.mode || 'ask';
+    } catch {
+      // Fallback to old format (plain text)
+      displayText = messageData.trim();
+    }
+
+    if (!displayText) return;
+
+    console.log('Sending message:', displayText);
+    console.log('Mode:', mode);
+    console.log('Context items:', contextItems);
 
     // Add user message
     const userMessage: ChatMessage = {
       id: this.generateId(),
-      text: text.trim(),
+      text: displayText,
       type: 'user',
       timestamp: new Date(),
       isStreaming: false
@@ -173,12 +215,18 @@ Start by configuring your Google Cloud project, then ask questions about your da
       return;
     }
 
+    // Send the original JSON string to preserve mode information
     this.vscodeApiService.postMessage({
       command: 'sendMessage',
-      text: text.trim()
+      text: messageData
     });
     
     console.log('Message sent to extension');
+  }
+
+  onModeChange(mode: string) {
+    console.log('Mode changed to:', mode);
+    // You can add additional logic here for mode changes
   }
 
   private startStreaming() {
@@ -194,6 +242,14 @@ Start by configuring your Google Cloud project, then ask questions about your da
     console.log('Response type:', response.type);
     console.log('Response data:', response.data);
     console.log('Current messages count:', this.messages.length);
+    
+    // Set title from systemMessage schema query if available and title hasn't been set yet
+    if (!this.hasSetTitle && response.data?.question) {
+      const title = response.data.question;
+      this.titleService.setTitle(title);
+      this.hasSetTitle = true;
+      console.log('Title set from systemMessage:', title);
+    }
     
     // Create a new message for each response chunk
     const newMessage: ChatMessage = {
@@ -255,5 +311,28 @@ Start by configuring your Google Cloud project, then ask questions about your da
 
   private generateId(): string {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  }
+
+  private generateTitleFromMessage(message: string): string {
+    // Clean up the message and create a title
+    let title = message.trim();
+    
+    // Remove common prefixes
+    title = title.replace(/^(question|query|ask|tell me about|show me|analyze|explain|what is|how to|can you|please)\s+/i, '');
+    
+    // Limit length
+    if (title.length > 50) {
+      title = title.substring(0, 47) + '...';
+    }
+    
+    // Capitalize first letter
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+    
+    // If title is empty or too short, use a default
+    if (!title || title.length < 3) {
+      title = 'New Chat';
+    }
+    
+    return title;
   }
 } 
