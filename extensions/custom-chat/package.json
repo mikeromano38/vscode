@@ -51,8 +51,23 @@
         "category": "DataVibe"
       },
       {
+        "command": "custom-chat.testSessionManager",
+        "title": "Test Session Manager",
+        "category": "DataVibe"
+      },
+      {
         "command": "custom-chat.refreshGeminiCliService",
         "title": "Refresh Gemini CLI Integration",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.showConfigStatus",
+        "title": "Show Configuration Status",
+        "category": "DataVibe"
+      },
+      {
+        "command": "custom-chat.openSettings",
+        "title": "Open Settings",
         "category": "DataVibe"
       }
     ],
@@ -110,6 +125,32 @@
           "type": "object",
           "default": {},
           "description": "Custom data sources configuration for Conversational Analytics API"
+        },
+        "customChat.googleCloud.projectId": {
+          "type": "string",
+          "default": "",
+          "description": "Google Cloud Project ID for BigQuery connectivity"
+        },
+        "customChat.googleCloud.useApplicationDefaultCredentials": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use Application Default Credentials (ADC) for authentication (required)"
+        },
+        "customChat.gemini.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Gemini API key for authentication (alternative to Google Cloud credentials)"
+        },
+        "customChat.gemini.model": {
+          "type": "string",
+          "default": "gemini-2.5-pro",
+          "enum": ["gemini-2.5-pro", "gemini-2.0-flash-exp", "gemini-1.5-pro"],
+          "description": "Gemini model to use for AI interactions"
+        },
+        "customChat.gemini.debugMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable debug mode for Gemini CLI"
         }
       }
     }

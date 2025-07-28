@@ -3,6 +3,7 @@ import { ConversationalAnalyticsService } from './conversationalAnalyticsService
 import { DeveloperAgentService } from './developerAgentService';
 import { ConfigHelper } from './configHelper';
 import { ParsedStreamResponse } from './types/responseTypes';
+import { ResponseParser } from './utils/responseParser';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -72,6 +73,10 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
                     case 'openSqlInEditor':
                         console.log('Handling openSqlInEditor');
                         this._handleOpenSqlInEditor(message.sql);
+                        return;
+                    case 'restoreCheckpoint':
+                        console.log('Handling restoreCheckpoint');
+                        this._handleRestoreCheckpoint(message.checkpointId);
                         return;
                     default:
                         console.log('Unknown command:', message.command);
@@ -216,7 +221,13 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
     }
 
     private async _handleAgentMode(messageText: string, context: any) {
-        if (!this._view) return;
+        if (!this._view) {
+            console.error('[WebviewProvider] No webview available for agent mode');
+            return;
+        }
+        
+        console.log('[WebviewProvider] Webview available:', !!this._view);
+        console.log('[WebviewProvider] Webview webview available:', !!this._view.webview);
         
         try {
             console.log('=== Handling Agent Mode ===');
@@ -229,26 +240,61 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
             if (!isAvailable) {
                 this._view.webview.postMessage({ 
                     command: 'addError', 
-                    text: '❌ **Agent Service Error**: Developer Agent service is not available.' 
+                    text: '❌ **Agent Service Error**: Developer Agent service is not available. Please ensure Gemini CLI is properly configured.' 
                 });
                 this._view.webview.postMessage({ command: 'setProcessing', processing: false });
                 return;
             }
 
-            this._view.webview.postMessage({ command: 'updateStatus', text: 'Processing with Developer Agent...' });
+            this._view.webview.postMessage({ command: 'updateStatus', text: '🤖 Processing with Gemini CLI...' });
 
-            // Process the message with the agent service
-            await agentService.processAgentMessage(messageText, context);
-
-            // Add a success message to the chat
+            // Add an empty assistant message that will be updated with streaming
             this._view.webview.postMessage({ 
                 command: 'addMessage', 
-                text: `🤖 **Agent Mode**: Your request has been processed by the Developer Agent service. Check the notifications for details.`,
+                text: '',
                 isUser: false
             });
 
-            this._view.webview.postMessage({ command: 'updateStatus', text: 'Ready' });
-            this._view.webview.postMessage({ command: 'setProcessing', processing: false });
+            // Set up agent update listener
+            const updateListener = (update: any) => {
+                console.log('[WebviewProvider] Agent update received:', update);
+                this._view?.webview.postMessage({
+                    command: 'agentUpdate',
+                    update: update
+                });
+            };
+
+            agentService.on('update', updateListener);
+
+            try {
+                // Process the message with the agent service
+                const response = await agentService.processAgentMessage(messageText, context);
+
+                // Remove the listener
+                agentService.removeListener('update', updateListener);
+
+                // Handle the response based on its type
+                console.log('[WebviewProvider] Agent response received:', response);
+                console.log('[WebviewProvider] Response type:', response.type);
+                console.log('[WebviewProvider] Response content length:', response.content?.length || 0);
+                console.log('[WebviewProvider] Response content preview:', response.content?.substring(0, 200) || 'empty');
+                
+                if (response.type === 'error') {
+                    console.log('[WebviewProvider] Sending error message to webview');
+                    this._view.webview.postMessage({ 
+                        command: 'addError', 
+                        text: response.content
+                    });
+                }
+
+                this._view.webview.postMessage({ command: 'updateStatus', text: 'Ready' });
+                this._view.webview.postMessage({ command: 'setProcessing', processing: false });
+
+            } catch (error) {
+                // Remove the listener on error
+                agentService.removeListener('update', updateListener);
+                throw error;
+            }
 
         } catch (error) {
             console.error('Agent mode error:', error);
@@ -485,6 +531,45 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
         } catch (error) {
             console.error('Failed to open SQL in editor:', error);
             vscode.window.showErrorMessage(`Failed to open SQL in editor: ${error}`);
+        }
+    }
+
+    private async _handleRestoreCheckpoint(checkpointId: string) {
+        if (!this._view) return;
+        
+        try {
+            console.log('[WebviewProvider] Restoring checkpoint:', checkpointId);
+            
+            this._view.webview.postMessage({ command: 'updateStatus', text: '🔄 Restoring checkpoint...' });
+            
+            // Get the agent service and restore checkpoint
+            const agentService = DeveloperAgentService.getInstance();
+            const response = await agentService.restoreCheckpoint(checkpointId);
+            
+            // Handle the response
+            if (response.type === 'error') {
+                this._view.webview.postMessage({ 
+                    command: 'addError', 
+                    text: response.content
+                });
+            } else {
+                this._view.webview.postMessage({ 
+                    command: 'addMessage', 
+                    text: response.content,
+                    isUser: false,
+                    metadata: { ...response.metadata, restored: true }
+                });
+            }
+            
+            this._view.webview.postMessage({ command: 'updateStatus', text: 'Ready' });
+            
+        } catch (error) {
+            console.error('[WebviewProvider] Error restoring checkpoint:', error);
+            this._view.webview.postMessage({ 
+                command: 'addError', 
+                text: `❌ Error restoring checkpoint: ${error instanceof Error ? error.message : String(error)}`
+            });
+            this._view.webview.postMessage({ command: 'updateStatus', text: 'Ready' });
         }
     }
 } 

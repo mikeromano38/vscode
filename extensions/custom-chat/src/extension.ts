@@ -5,8 +5,10 @@ import { BigQueryTableService } from './bigqueryTableService';
 import { DeveloperAgentService } from './developerAgentService';
 import { MCPIntegrationService } from './mcpIntegrationService';
 import { GeminiCliService } from './geminiCliService';
+import { ConfigService } from './configService';
+import { GeminiSessionManager, GeminiSessionConfig } from './geminiSessionManager';
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
     console.log('=== DataVibe extension is now active! ===');
     console.log('Extension context:', context.extension.id);
     console.log('Extension path:', context.extension.extensionPath);
@@ -17,6 +19,13 @@ export function activate(context: vscode.ExtensionContext) {
     
     // Initialize Gemini CLI service
     const geminiCliService = GeminiCliService.getInstance(context);
+    
+    // Initialize Developer Agent Service with Gemini CLI integration
+    const developerAgentService = DeveloperAgentService.getInstance();
+    await developerAgentService.initialize(context);
+    
+    // Initialize Configuration Service
+    const configService = ConfigService.getInstance(context);
     
     // Register the webview view provider
     context.subscriptions.push(
@@ -159,16 +168,26 @@ export function activate(context: vscode.ExtensionContext) {
                 console.log('Agent service configuration:', config);
                 
                 // Test message processing
-                const testMessage = 'Hello from test command!';
+                const testMessage = 'List the first 3 datasets in the daui-storage project';
                 console.log('Testing message processing with:', testMessage);
                 
-                await agentService.processAgentMessage(testMessage, { test: true });
+                const response = await agentService.processAgentMessage(testMessage, { test: true });
+                console.log('Agent response:', response);
+                
+                // Test session functionality
+                const chatHistory = agentService.getChatHistory();
+                const isSessionActive = agentService.isSessionActive();
                 
                 vscode.window.showInformationMessage(
                     `✅ Developer Agent Service Test Results:\n` +
                     `• Available: ${isAvailable ? 'Yes' : 'No'}\n` +
                     `• Configuration: ${config.serviceType} v${config.version}\n` +
-                    `• Message processing: Success\n\n` +
+                    `• Status: ${config.status}\n` +
+                    `• Gemini CLI: ${config.geminiCli ? 'Configured' : 'Not Configured'}\n` +
+                    `• Session Active: ${isSessionActive ? 'Yes' : 'No'}\n` +
+                    `• Chat History: ${chatHistory.length} messages\n` +
+                    `• Message processing: Success\n` +
+                    `• Response Type: ${response.type}\n\n` +
                     `Agent service is working correctly!`
                 );
                 
@@ -306,6 +325,61 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
+        vscode.commands.registerCommand('custom-chat.testSessionManager', async () => {
+            try {
+                console.log('=== Testing Gemini Session Manager ===');
+                
+                // Test the session manager
+                const sessionManager = GeminiSessionManager.getInstance(context);
+                
+                // Start a session
+                const workspaceDir = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || process.cwd();
+                const sessionConfig: GeminiSessionConfig = {
+                    model: 'gemini-2.5-pro',
+                    debug: true,
+                    yolo: true,
+                    checkpointing: true,
+                    workspaceDir: workspaceDir
+                };
+                
+                console.log('Starting session with config:', sessionConfig);
+                const sessionStarted = await sessionManager.startSession(sessionConfig);
+                console.log('Session started:', sessionStarted);
+                
+                if (sessionStarted) {
+                    // Test sending a message
+                    console.log('Testing session with message...');
+                    const response1 = await sessionManager.sendMessage('Hello, what is your name?');
+                    console.log('Response 1:', response1);
+                    
+                    // Test sending another message to see if session persists
+                    console.log('Testing session persistence...');
+                    const response2 = await sessionManager.sendMessage('What did I just ask you?');
+                    console.log('Response 2:', response2);
+                    
+                    // Stop the session
+                    await sessionManager.stopSession();
+                    
+                    vscode.window.showInformationMessage(
+                        `✅ Session Manager Test Results:\n` +
+                        `• Session Started: ${sessionStarted ? 'Yes' : 'No'}\n` +
+                        `• First Response: ${response1.success ? 'Success' : 'Failed'}\n` +
+                        `• Second Response: ${response2.success ? 'Success' : 'Failed'}\n` +
+                        `• Session Active: ${sessionManager.isActive()}\n\n` +
+                        `Session manager test completed!`
+                    );
+                } else {
+                    vscode.window.showWarningMessage('Session manager test failed - could not start session');
+                }
+                
+            } catch (error) {
+                console.error('Session manager test failed:', error);
+                vscode.window.showErrorMessage(`Session manager test failed: ${error}`);
+            }
+        })
+    );
+
+    context.subscriptions.push(
         vscode.commands.registerCommand('custom-chat.refreshGeminiCliService', async () => {
             try {
                 console.log('=== Refreshing Gemini CLI Integration Service ===');
@@ -333,7 +407,35 @@ export function activate(context: vscode.ExtensionContext) {
         })
     );
 
+    context.subscriptions.push(
+        vscode.commands.registerCommand('custom-chat.showConfigStatus', async () => {
+            try {
+                console.log('=== Showing Configuration Status ===');
+                
+                const configService = ConfigService.getInstance(context);
+                await configService.showConfigStatus();
+                
+            } catch (error) {
+                console.error('Configuration status display failed:', error);
+                vscode.window.showErrorMessage(`Configuration status display failed: ${error}`);
+            }
+        })
+    );
 
+    context.subscriptions.push(
+        vscode.commands.registerCommand('custom-chat.openSettings', async () => {
+            try {
+                console.log('=== Opening Settings ===');
+                
+                const configService = ConfigService.getInstance(context);
+                await configService.openSettings();
+                
+            } catch (error) {
+                console.error('Settings open failed:', error);
+                vscode.window.showErrorMessage(`Settings open failed: ${error}`);
+            }
+        })
+    );
 
     // Register a status bar item to quickly open the chat
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
@@ -363,5 +465,11 @@ export function deactivate() {
     if (geminiCliService) {
         // No specific cleanup needed for Gemini CLI service
         console.log('[GeminiCliService] Cleanup completed');
+    }
+    
+    // Cleanup Developer Agent Service (includes session cleanup)
+    const agentService = DeveloperAgentService.getInstance();
+    if (agentService) {
+        console.log('[DeveloperAgentService] Cleanup completed');
     }
 } 

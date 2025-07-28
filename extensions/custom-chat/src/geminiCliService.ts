@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as cp from 'child_process';
+import { ConfigService } from './configService';
 
 export interface GeminiCliConfig {
     isInstalled: boolean;
@@ -24,6 +25,7 @@ export class GeminiCliService {
     private static instance: GeminiCliService;
     private context: vscode.ExtensionContext;
     private config: GeminiCliConfig | null = null;
+    private configService: ConfigService | null = null;
 
     private constructor(context: vscode.ExtensionContext) {
         this.context = context;
@@ -42,6 +44,9 @@ export class GeminiCliService {
     public async initialize(): Promise<boolean> {
         try {
             console.log('[GeminiCliService] Initializing Gemini CLI service...');
+
+            // Initialize configuration service
+            this.configService = ConfigService.getInstance(this.context);
 
             // Check if Gemini CLI is installed
             const isInstalled = await this.checkInstallation();
@@ -214,7 +219,11 @@ export class GeminiCliService {
                 settings = JSON.parse(settingsContent);
             }
 
-            // Configure MCP servers with full path
+            // Get the current workspace directory
+            const workspaceDir = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || process.cwd();
+            console.log('[GeminiCliService] Using workspace directory for MCP server:', workspaceDir);
+
+            // Configure MCP servers with simplified environment (ADC only)
             settings.mcpServers = {
                 ...settings.mcpServers,
                 bigquery: {
@@ -227,11 +236,22 @@ export class GeminiCliService {
                     ],
                     env: {
                         BIGQUERY_PROJECT: projectId,
-                        GOOGLE_APPLICATION_CREDENTIALS: await this.getGoogleCredentialsPath(),
-                        PATH: process.env.PATH || ''
+                        PATH: process.env.PATH || '',
+                        PWD: workspaceDir  // Set working directory for spawned processes
                     }
                 }
             };
+
+            // Add Gemini API key to environment if available
+            if (this.configService) {
+                const geminiApiKey = await this.configService.getEffectiveGeminiApiKey();
+                if (geminiApiKey) {
+                    settings.env = {
+                        ...settings.env,
+                        GEMINI_API_KEY: geminiApiKey
+                    };
+                }
+            }
 
             // Ensure other required settings
             settings.theme = settings.theme || 'Default';
@@ -253,6 +273,7 @@ export class GeminiCliService {
                 `• BigQuery MCP server: ${path.basename(toolboxPath)}\n` +
                 `• Path: ${toolboxPath}\n` +
                 `• Project: ${projectId}\n` +
+                `• Authentication: Application Default Credentials\n` +
                 `• Ready for BigQuery queries!`
             );
 
@@ -278,17 +299,37 @@ export class GeminiCliService {
             // Build command arguments
             const args: string[] = [];
             
-            if (execution.options?.model) {
-                args.push('-m', execution.options.model);
+            // Use model from config service if not specified in execution options
+            let model = execution.options?.model;
+            if (!model && this.configService) {
+                const geminiConfig = this.configService.getGeminiConfig();
+                model = geminiConfig.model;
+            }
+            
+            if (model) {
+                args.push('-m', model);
             }
             
             if (execution.options?.sandbox) {
                 args.push('-s');
             }
             
-            if (execution.options?.debug) {
+            // Use debug mode from config service if not specified in execution options
+            let debugMode = execution.options?.debug;
+            if (debugMode === undefined && this.configService) {
+                const geminiConfig = this.configService.getGeminiConfig();
+                debugMode = geminiConfig.debugMode;
+            }
+            
+            if (debugMode) {
                 args.push('-d');
             }
+            
+            // Enable YOLO mode for automatic action acceptance
+            args.push('-y');
+            
+            // Enable checkpointing for state management
+            args.push('-c');
 
             // Execute command with prompt via stdin
             let command = `gemini ${args.join(' ')}`;
@@ -301,6 +342,14 @@ export class GeminiCliService {
             const result = await this.execCommand(command);
             
             console.log('[GeminiCliService] Gemini CLI execution completed');
+            console.log('[GeminiCliService] Result length:', result?.length || 0);
+            console.log('[GeminiCliService] Result preview:', result?.substring(0, 200) || 'empty');
+            
+            if (!result || result.trim().length === 0) {
+                console.warn('[GeminiCliService] Empty result from Gemini CLI');
+                return 'No response received from Gemini CLI. Please check your configuration and try again.';
+            }
+            
             return result;
 
         } catch (error) {
@@ -314,7 +363,7 @@ export class GeminiCliService {
      */
     public async testBigQueryIntegration(): Promise<string> {
         try {
-            const testPrompt = 'List the available BigQuery datasets in the current project';
+            const testPrompt = 'List the available BigQuery datasets in the daui-storage project';
             
             console.log('[GeminiCliService] Testing BigQuery integration...');
             
@@ -353,49 +402,24 @@ export class GeminiCliService {
      * Get Google Cloud project ID from VS Code settings
      */
     private async getGoogleCloudProjectId(): Promise<string | null> {
-        // Try to get from VS Code settings
-        const config = vscode.workspace.getConfiguration('google-cloud');
-        let projectId = config.get<string>('projectId') || null;
-
-        if (!projectId) {
-            // Try alternative configuration keys
-            const customConfig = vscode.workspace.getConfiguration('customChat');
-            projectId = customConfig.get<string>('googleCloudProjectId') || null;
+        if (this.configService) {
+            const projectId = await this.configService.getEffectiveProjectId();
+            if (projectId) {
+                console.log('[GeminiCliService] Using Google Cloud project ID from config service:', projectId);
+                return projectId;
+            }
         }
-
-        if (!projectId) {
-            // Try to get from environment
-            projectId = process.env.GOOGLE_CLOUD_PROJECT || null;
-        }
-
-        return projectId;
+        
+        console.warn('[GeminiCliService] No Google Cloud project ID configured');
+        return null;
     }
 
     /**
      * Get Google Cloud credentials path
+     * Now simplified to only use Application Default Credentials
      */
     private async getGoogleCredentialsPath(): Promise<string> {
-        // Try to get from environment
-        if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-            return process.env.GOOGLE_APPLICATION_CREDENTIALS;
-        }
-
-        // Try common locations
-        const possiblePaths = [
-            path.join(process.env.HOME || '', '.config/gcloud/application_default_credentials.json'),
-            path.join(process.env.HOME || '', '.gcloud/application_default_credentials.json')
-        ];
-
-        for (const credPath of possiblePaths) {
-            try {
-                await fs.promises.access(credPath, fs.constants.R_OK);
-                return credPath;
-            } catch {
-                // File not found, continue
-            }
-        }
-
-        // Return empty string to use default credentials
+        console.log('[GeminiCliService] Using Application Default Credentials');
         return '';
     }
 
@@ -403,12 +427,45 @@ export class GeminiCliService {
      * Execute a command and return the result
      */
     private async execCommand(command: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            cp.exec(command, (error, stdout, stderr) => {
+        return new Promise(async (resolve, reject) => {
+            console.log('[GeminiCliService] Executing command:', command);
+            
+            // Get the current workspace directory
+            const workspaceDir = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || process.cwd();
+            console.log('[GeminiCliService] Using workspace directory:', workspaceDir);
+            
+            // Get project ID from config service
+            let projectId = '';
+            if (this.configService) {
+                projectId = await this.configService.getEffectiveProjectId();
+            }
+            
+            cp.exec(command, { 
+                maxBuffer: 1024 * 1024,
+                cwd: workspaceDir,  // Set working directory to current workspace
+                env: {
+                    ...process.env,
+                    GOOGLE_CLOUD_PROJECT: projectId
+                }
+            }, (error, stdout, stderr) => {
+                console.log('[GeminiCliService] Command completed');
+                console.log('[GeminiCliService] stdout length:', stdout?.length || 0);
+                console.log('[GeminiCliService] stderr length:', stderr?.length || 0);
+                
+                if (stderr && stderr.trim()) {
+                    console.log('[GeminiCliService] stderr:', stderr);
+                }
+                
                 if (error) {
+                    console.error('[GeminiCliService] Command error:', error);
+                    console.error('[GeminiCliService] Error stdout:', stdout);
+                    console.error('[GeminiCliService] Error stderr:', stderr);
                     reject(error);
                 } else {
-                    resolve(stdout);
+                    // Return both stdout and stderr if stderr contains output
+                    const result = stderr && stderr.trim() ? `${stdout}\n${stderr}` : stdout;
+                    console.log('[GeminiCliService] Command result length:', result?.length || 0);
+                    resolve(result || '');
                 }
             });
         });

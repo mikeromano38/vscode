@@ -12,6 +12,8 @@ export interface ChatMessage {
   timestamp: Date;
   isStreaming: boolean;
   responses?: ParsedStreamResponse[];
+  checkpointId?: string;
+  metadata?: any;
 }
 
 declare function acquireVsCodeApi(): any;
@@ -23,7 +25,8 @@ declare function acquireVsCodeApi(): any;
       <div class="messages" #messagesContainer>
         <app-message 
           *ngFor="let message of messages" 
-          [message]="message">
+          [message]="message"
+          (restoreCheckpoint)="restoreCheckpoint($event)">
         </app-message>
       </div>
       
@@ -141,6 +144,9 @@ export class ChatComponent implements OnInit, OnDestroy {
         case 'finishStreaming':
           this.finishStreaming();
           break;
+        case 'addMessage':
+          this.addMessage(message.text, message.isUser || false, message.metadata);
+          break;
         case 'addError':
           this.addError(message.text);
           break;
@@ -149,6 +155,9 @@ export class ChatComponent implements OnInit, OnDestroy {
           break;
         case 'setProcessing':
           this.setProcessing(message.processing);
+          break;
+        case 'agentUpdate':
+          this.handleAgentUpdate(message.update);
           break;
       }
     });
@@ -273,6 +282,27 @@ Start by configuring your Google Cloud project, then ask questions about your da
     this.scrollToBottom();
   }
 
+  private addMessage(text: string, isUser: boolean = false, metadata?: any) {
+    console.log('=== Adding message ===');
+    console.log('Text:', text);
+    console.log('Is user:', isUser);
+    console.log('Metadata:', metadata);
+    
+    const message: ChatMessage = {
+      id: this.generateId(),
+      text: text,
+      type: isUser ? 'user' : 'assistant',
+      timestamp: new Date(),
+      isStreaming: false,
+      checkpointId: metadata?.checkpointId,
+      metadata: metadata
+    };
+    
+    this.messages.push(message);
+    console.log('Message added, total messages:', this.messages.length);
+    this.scrollToBottom();
+  }
+
   private addError(text: string) {
     const lastMessage = this.messages[this.messages.length - 1];
     if (lastMessage && lastMessage.isStreaming) {
@@ -298,6 +328,56 @@ Start by configuring your Google Cloud project, then ask questions about your da
 
   private setProcessing(processing: boolean) {
     this.isProcessing = processing;
+  }
+
+  private handleAgentUpdate(update: any) {
+    const lastMessage = this.messages[this.messages.length - 1];
+    
+    switch (update.type) {
+      case 'start':
+        // Start typing effect for the last assistant message
+        if (lastMessage && lastMessage.type === 'assistant') {
+          lastMessage.isStreaming = true;
+          lastMessage.text = '';
+        }
+        break;
+        
+      case 'content':
+        // Add content with typing effect
+        if (update.content && lastMessage && lastMessage.type === 'assistant') {
+          lastMessage.text += update.content;
+          this.scrollToBottom();
+        }
+        break;
+        
+      case 'complete':
+        // Finish typing effect
+        if (lastMessage && lastMessage.type === 'assistant') {
+          lastMessage.isStreaming = false;
+          // Content is already accumulated from streaming, just finish the typing effect
+        }
+        break;
+        
+      case 'error':
+        // Handle error
+        this.addError(update.error || 'An error occurred');
+        break;
+    }
+  }
+
+  restoreCheckpoint(checkpointId: string) {
+    console.log('=== Restoring checkpoint ===');
+    console.log('Checkpoint ID:', checkpointId);
+    
+    if (!this.vscodeApiService.isAvailable()) {
+      console.error('VS Code API not available');
+      return;
+    }
+    
+    this.vscodeApiService.postMessage({
+      command: 'restoreCheckpoint',
+      checkpointId: checkpointId
+    });
   }
 
   private scrollToBottom() {

@@ -62,15 +62,18 @@ export class MCPServerManager {
                 throw new Error('Google GenAI Toolbox binary not found. Please install it first.');
             }
 
+            // Get the current workspace directory
+            const workspaceDir = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || process.cwd();
+            console.log(`[MCPServerManager] Using workspace directory for ${serverName}:`, workspaceDir);
+
             // Configure server
             const config: MCPServerConfig = {
                 name: serverName,
                 command: toolboxPath,
                 args: ['serve', '--prebuilt', 'bigquery', '--port', '5000'],
-                cwd: path.dirname(toolboxPath),
+                cwd: workspaceDir,  // Use workspace directory instead of toolbox directory
                 env: {
-                    ...process.env,
-                    GOOGLE_APPLICATION_CREDENTIALS: await this.getGoogleCredentialsPath()
+                    ...process.env
                 },
                 port: 5000
             };
@@ -134,29 +137,10 @@ export class MCPServerManager {
 
     /**
      * Get Google Cloud credentials path
+     * Now simplified to only use Application Default Credentials
      */
     private async getGoogleCredentialsPath(): Promise<string> {
-        // Try to get from environment
-        if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-            return process.env.GOOGLE_APPLICATION_CREDENTIALS;
-        }
-
-        // Try common locations
-        const possiblePaths = [
-            path.join(process.env.HOME || '', '.config/gcloud/application_default_credentials.json'),
-            path.join(process.env.HOME || '', '.gcloud/application_default_credentials.json')
-        ];
-
-        for (const credPath of possiblePaths) {
-            try {
-                await fs.promises.access(credPath, fs.constants.R_OK);
-                return credPath;
-            } catch {
-                // File not found, continue
-            }
-        }
-
-        // Return empty string to use default credentials
+        console.log('[MCPServerManager] Using Application Default Credentials');
         return '';
     }
 
