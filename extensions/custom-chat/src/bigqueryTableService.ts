@@ -81,81 +81,8 @@ export class BigQueryTableService {
         console.log(`  - Has 'bigquery' in name: ${hasBigQueryInName}`);
         console.log(`  - Has 'bq_' prefix: ${hasBqPrefix}`);
         console.log(`  - Is SQL file: ${isSqlFile}`);
-        
-        if (hasBigQueryInName || hasBqPrefix || isSqlFile) {
-            console.log(`[BigQueryTableService] ✅ File matches criteria, analyzing...`);
-            
-            // Try to extract project, dataset, table from the file path or content
-            console.log(`[BigQueryTableService] Trying to parse from filename...`);
-            const tableInfo = this.parseTableInfoFromFileName(fileName);
-            if (tableInfo) {
-                console.log(`[BigQueryTableService] ✅ Found table info from filename: ${tableInfo.projectId}.${tableInfo.datasetId}.${tableInfo.tableId}`);
-                return tableInfo;
-            } else {
-                console.log(`[BigQueryTableService] ❌ No table info found in filename`);
-            }
-            
-            // If no pattern match, try to extract from SQL content
-            console.log(`[BigQueryTableService] Trying to parse from SQL content...`);
-            const sqlContent = document.getText();
-            console.log(`[BigQueryTableService] SQL content length: ${sqlContent.length} characters`);
-            console.log(`[BigQueryTableService] SQL content preview: ${sqlContent.substring(0, 200)}...`);
-            
-            const tableInfoFromSQL = this.parseTableInfoFromSQL(sqlContent);
-            if (tableInfoFromSQL) {
-                console.log(`[BigQueryTableService] ✅ Found table info from SQL: ${tableInfoFromSQL.projectId}.${tableInfoFromSQL.datasetId}.${tableInfoFromSQL.tableId}`);
-                return tableInfoFromSQL;
-            } else {
-                console.log(`[BigQueryTableService] ❌ No table info found in SQL content`);
-            }
-        } else {
-            console.log(`[BigQueryTableService] ❌ File does not match any criteria`);
-        }
 
         console.log(`[BigQueryTableService] === End extractTableInfoFromTab() ===`);
-        return null;
-    }
-
-    /**
-     * Parse table information from file name
-     * Expected format: project.dataset.table or similar
-     */
-    private parseTableInfoFromFileName(fileName: string): BigQueryTableReference | null {
-        console.log(`[BigQueryTableService] parseTableInfoFromFileName: ${fileName}`);
-        
-        // Remove path and extension
-        const baseName = fileName.split('/').pop()?.split('\\').pop()?.split('.')[0];
-        console.log(`[BigQueryTableService] Base name: ${baseName}`);
-        
-        if (!baseName) {
-            console.log(`[BigQueryTableService] No base name found`);
-            return null;
-        }
-
-        // Try different patterns
-        const patterns = [
-            /^([^.]+)\.([^.]+)\.([^.]+)$/, // project.dataset.table
-            /^([^.]+)_([^.]+)_([^.]+)$/,   // project_dataset_table
-            /^bq_([^.]+)_([^.]+)_([^.]+)$/ // bq_project_dataset_table
-        ];
-
-        for (let i = 0; i < patterns.length; i++) {
-            const pattern = patterns[i];
-            console.log(`[BigQueryTableService] Trying pattern ${i + 1}: ${pattern}`);
-            const match = baseName.match(pattern);
-            if (match) {
-                console.log(`[BigQueryTableService] ✅ Pattern ${i + 1} matched:`, match);
-                return {
-                    projectId: match[1],
-                    datasetId: match[2],
-                    tableId: match[3]
-                };
-            } else {
-                console.log(`[BigQueryTableService] ❌ Pattern ${i + 1} did not match`);
-            }
-        }
-
-        console.log(`[BigQueryTableService] No patterns matched`);
         return null;
     }
 
@@ -420,22 +347,6 @@ export class BigQueryTableService {
                                     // Log the exact title for debugging
                                     console.log('[BigQueryTableService] Webview tab title for debugging:', JSON.stringify(tab.label));
                                 }
-                            }
-                        }
-                    } else if (tab.input && tab.input instanceof vscode.TabInputText) {
-                        console.log('[BigQueryTableService] Found text tab:', tab.label);
-                        
-                        // For text tabs, try to extract table info from the document
-                        const document = tab.input.uri;
-                        console.log('[BigQueryTableService] Document URI:', document.toString());
-                        
-                        // Check if this is a BigQuery-related file
-                        if (document.scheme === 'file') {
-                            const fileName = document.fsPath;
-                            const tableInfo = this.parseTableInfoFromFileName(fileName);
-                            if (tableInfo) {
-                                console.log('[BigQueryTableService] ✅ Found table info from text tab filename:', tableInfo);
-                                webviewTabs.push(tableInfo);
                             }
                         }
                     } else {

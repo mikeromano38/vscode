@@ -39,12 +39,23 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@
           </div>
           
           <button 
+            *ngIf="!isProcessing"
             class="send-btn" 
-            [disabled]="isProcessing || !messageText.trim()"
+            [disabled]="!messageText.trim()"
             (click)="sendMessage()"
-            [title]="isProcessing ? 'Sending...' : 'Send message'">
+            title="Send message">
             <svg class="send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
+            </svg>
+          </button>
+          
+          <button 
+            *ngIf="isProcessing"
+            class="stop-btn" 
+            (click)="stopRequest()"
+            title="Stop request">
+            <svg class="stop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="6" y="6" width="12" height="12"/>
             </svg>
           </button>
         </div>
@@ -217,6 +228,32 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@
       height: 16px;
     }
 
+    .stop-btn {
+      background-color: var(--vscode-errorForeground);
+      color: var(--vscode-button-foreground);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .stop-btn:hover {
+      background-color: var(--vscode-errorForeground);
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+
+    .stop-icon {
+      width: 16px;
+      height: 16px;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 400px) {
       .input-container {
@@ -242,6 +279,16 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@
         width: 14px;
         height: 14px;
       }
+      
+      .stop-btn {
+        width: 28px;
+        height: 28px;
+      }
+      
+      .stop-icon {
+        width: 14px;
+        height: 14px;
+      }
     }
   `]
 })
@@ -249,6 +296,7 @@ export class InputComponent {
   @Input() isProcessing = false;
   @Output() sendMessageEvent = new EventEmitter<string>();
   @Output() modeChangeEvent = new EventEmitter<string>();
+  @Output() stopRequestEvent = new EventEmitter<void>();
   
   @ViewChild('messageInput') messageInput!: ElementRef<HTMLTextAreaElement>;
   
@@ -312,5 +360,9 @@ export class InputComponent {
         this.messageInput.nativeElement.focus();
       }
     }, 100);
+  }
+
+  stopRequest() {
+    this.stopRequestEvent.emit();
   }
 } 

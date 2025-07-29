@@ -208,14 +208,40 @@ export class GeminiSessionManager extends EventEmitter {
                 PWD: this.config.workspaceDir
             };
 
-            // Add Google Cloud project ID to environment
+            // Add Google Cloud project ID and Gemini API key to environment
             if (this.configService) {
                 const projectId = await this.configService.getEffectiveProjectId();
+                const apiKey = await this.configService.getEffectiveGeminiApiKey();
+                
                 if (projectId) {
                     env.GOOGLE_CLOUD_PROJECT = projectId;
                     console.log('[GeminiSessionManager] Set GOOGLE_CLOUD_PROJECT:', projectId);
+                    
+                    // Also set gcloud to use the same project to ensure credentials are aligned
+                    try {
+                        const { exec } = require('child_process');
+                        await new Promise<void>((resolve, reject) => {
+                            exec(`gcloud config set project ${projectId}`, (error: any) => {
+                                if (error) {
+                                    console.warn('[GeminiSessionManager] Could not set gcloud project:', error);
+                                } else {
+                                    console.log('[GeminiSessionManager] Set gcloud project to:', projectId);
+                                }
+                                resolve();
+                            });
+                        });
+                    } catch (error) {
+                        console.warn('[GeminiSessionManager] Error setting gcloud project:', error);
+                    }
                 } else {
                     console.warn('[GeminiSessionManager] No project ID found, this may cause authentication issues');
+                }
+                
+                if (apiKey) {
+                    env.GEMINI_API_KEY = apiKey;
+                    console.log('[GeminiSessionManager] Set GEMINI_API_KEY');
+                } else {
+                    console.warn('[GeminiSessionManager] No Gemini API key found, this may cause authentication issues');
                 }
             } else {
                 console.warn('[GeminiSessionManager] Config service not available');

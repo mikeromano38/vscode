@@ -16,6 +16,7 @@ import { Component } from '@angular/core';
       background-color: var(--vscode-editor-background);
       color: var(--vscode-foreground);
       overflow: hidden;
+      min-height: 0;
     }
   `]
 })

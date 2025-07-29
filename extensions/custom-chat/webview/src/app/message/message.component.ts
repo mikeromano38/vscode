@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ChatMessage } from '../chat/chat.component';
+import { VscodeApiService } from '../services/vscode-api.service';
 
 interface StructuredContent {
     type: 'step' | 'patch' | 'summary' | 'insight';
@@ -26,6 +27,12 @@ interface StructuredContent {
       <!-- Structured content for assistant messages (for agent mode) -->
       <div *ngIf="message.type === 'assistant' && message.text && !message.responses" class="message-content">
         <div [innerHTML]="formatStructuredMessage(message.text)"></div>
+        <!-- Accept Changes button for summary blocks -->
+        <div *ngIf="hasSummaryBlock(message.text)" class="summary-actions">
+          <button class="accept-changes-btn" (click)="onAcceptChanges()" type="button">
+            Accept Changes
+          </button>
+        </div>
       </div>
       
       <!-- Checkpoint restoration button for user messages -->
@@ -228,6 +235,60 @@ interface StructuredContent {
       margin: 2px 0;
     }
 
+    .summary-actions {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid var(--vscode-panel-border);
+    }
+
+    .accept-changes-btn {
+      background-color: var(--vscode-button-background);
+      color: var(--vscode-button-foreground);
+      border: 1px solid var(--vscode-button-border);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      user-select: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .accept-changes-btn:hover {
+      background-color: var(--vscode-button-hoverBackground);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .accept-changes-btn:active {
+      background-color: var(--vscode-button-activeBackground);
+      transform: translateY(0);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .accept-changes-btn:focus {
+      outline: 2px solid var(--vscode-focusBorder);
+      outline-offset: 2px;
+    }
+
+    .accept-changes-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .accept-changes-btn:disabled:hover {
+      background-color: var(--vscode-button-background);
+      transform: none;
+      box-shadow: none;
+    }
+
     .insight-finding, .insight-data, .insight-recommendation {
       margin: 5px 0;
     }
@@ -264,6 +325,50 @@ interface StructuredContent {
 export class MessageComponent {
   @Input() message!: ChatMessage;
   @Output() restoreCheckpoint = new EventEmitter<string>();
+
+  constructor(private vscodeApiService: VscodeApiService) {}
+
+  onAcceptChanges() {
+    console.log('Accept changes button clicked');
+    if (!this.vscodeApiService.isAvailable()) {
+      console.error('VS Code API not available');
+      return;
+    }
+    
+    // Add visual feedback to the button
+    const button = document.querySelector('.accept-changes-btn') as HTMLButtonElement;
+    if (button) {
+      button.disabled = true;
+      button.innerHTML = 'Accepted';
+    }
+    
+    this.vscodeApiService.postMessage({
+      command: 'acceptChanges'
+    });
+  }
+
+  hasSummaryBlock(text: string): boolean {
+    // Check if the text contains a summary block with completed actions
+    const summaryMatches = text.match(/```summary\n([\s\S]*?)\n```/g);
+    if (!summaryMatches) return false;
+    
+    for (const match of summaryMatches) {
+      const content = match.replace(/```summary\n/, '').replace(/\n```/, '');
+      const lines = content.split('\n');
+      
+      for (const line of lines) {
+        if (line.startsWith('COMPLETED:')) {
+          const completedContent = line.replace('COMPLETED:', '').trim();
+          const completedItems = completedContent.split(/[,;]/).map(item => item.trim()).filter(item => item);
+          if (completedItems.length > 0) {
+            return true;
+          }
+        }
+      }
+    }
+    
+    return false;
+  }
 
   onRestoreCheckpoint(checkpointId: string) {
     this.restoreCheckpoint.emit(checkpointId);
@@ -656,6 +761,9 @@ export class MessageComponent {
     if (next) {
       result += `<div class="summary-next"><strong>Next:</strong> ${next}</div>`;
     }
+    
+    // Note: Accept Changes button is now handled in the template
+    
     result += '</div>';
     
     return result;

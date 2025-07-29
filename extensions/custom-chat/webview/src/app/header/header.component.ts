@@ -22,6 +22,7 @@ import { TitleService } from '../services/title.service';
       padding: 15px 20px;
       border-bottom: 1px solid var(--vscode-panel-border);
       background-color: var(--vscode-editor-background);
+      flex-shrink: 0;
     }
 
     .title {

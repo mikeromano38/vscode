@@ -331,8 +331,29 @@ export class GeminiCliService {
             // Enable checkpointing for state management
             args.push('-c');
 
-            // Execute command with prompt via stdin
+            // Get project ID and API key from config service
+            let projectId = '';
+            let apiKey = '';
+            if (this.configService) {
+                projectId = await this.configService.getEffectiveProjectId();
+                apiKey = await this.configService.getEffectiveGeminiApiKey();
+            }
+            
+            // Execute command with prompt via stdin and environment variables set
             let command = `gemini ${args.join(' ')}`;
+            
+            // Set environment variables in the command
+            const envVars: string[] = [];
+            if (projectId) {
+                envVars.push(`GOOGLE_CLOUD_PROJECT="${projectId}"`);
+            }
+            if (apiKey) {
+                envVars.push(`GEMINI_API_KEY="${apiKey}"`);
+            }
+            
+            if (envVars.length > 0) {
+                command = `${envVars.join(' ')} ${command}`;
+            }
             
             if (execution.prompt) {
                 // Use echo to pipe the prompt to stdin
@@ -434,10 +455,12 @@ export class GeminiCliService {
             const workspaceDir = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || process.cwd();
             console.log('[GeminiCliService] Using workspace directory:', workspaceDir);
             
-            // Get project ID from config service
+            // Get project ID and API key from config service
             let projectId = '';
+            let apiKey = '';
             if (this.configService) {
                 projectId = await this.configService.getEffectiveProjectId();
+                apiKey = await this.configService.getEffectiveGeminiApiKey();
             }
             
             cp.exec(command, { 
@@ -445,7 +468,8 @@ export class GeminiCliService {
                 cwd: workspaceDir,  // Set working directory to current workspace
                 env: {
                     ...process.env,
-                    GOOGLE_CLOUD_PROJECT: projectId
+                    GOOGLE_CLOUD_PROJECT: projectId,
+                    GEMINI_API_KEY: apiKey
                 }
             }, (error, stdout, stderr) => {
                 console.log('[GeminiCliService] Command completed');

@@ -38,7 +38,8 @@ declare function acquireVsCodeApi(): any;
               <app-input 
         [isProcessing]="isProcessing"
         (sendMessageEvent)="onSendMessage($event)"
-        (modeChangeEvent)="onModeChange($event)">
+        (modeChangeEvent)="onModeChange($event)"
+        (stopRequestEvent)="onStopRequest()">
       </app-input>
       </div>
     </div>
@@ -48,6 +49,7 @@ declare function acquireVsCodeApi(): any;
       display: flex;
       flex-direction: column;
       height: 100%;
+      min-height: 0;
     }
 
     .chat-container {
@@ -57,18 +59,19 @@ declare function acquireVsCodeApi(): any;
       overflow: hidden;
       padding: 15px;
       min-height: 0;
-      height: 100%;
     }
 
     .messages {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 8px;
       background-color: var(--vscode-input-background);
       border: 1px solid var(--vscode-input-border);
       border-radius: 4px;
       min-height: 0;
       margin-bottom: 10px;
+      scroll-behavior: smooth;
     }
 
     .bottom-section {
@@ -76,6 +79,7 @@ declare function acquireVsCodeApi(): any;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      min-height: 0;
     }
 
     .status {
@@ -84,20 +88,24 @@ declare function acquireVsCodeApi(): any;
       text-align: center;
       padding: 8px;
       border-top: 1px solid var(--vscode-panel-border);
+      flex-shrink: 0;
     }
 
     /* Responsive adjustments for narrow sidebar */
     @media (max-width: 400px) {
       .chat-container {
         padding: 10px;
+        min-height: 0;
       }
       
       .messages {
         padding: 6px;
+        min-height: 0;
       }
       
       .bottom-section {
         gap: 8px;
+        min-height: 0;
       }
       
       .status {
@@ -236,6 +244,23 @@ Start by configuring your Google Cloud project, then ask questions about your da
   onModeChange(mode: string) {
     console.log('Mode changed to:', mode);
     // You can add additional logic here for mode changes
+  }
+
+  onStopRequest() {
+    console.log('Stop request received');
+    if (!this.vscodeApiService.isAvailable()) {
+      console.error('VS Code API not available');
+      return;
+    }
+
+    // Send stop command to extension
+    this.vscodeApiService.postMessage({
+      command: 'stopRequest'
+    });
+    
+    // Update local state
+    this.isProcessing = false;
+    this.statusMessage = 'Request stopped';
   }
 
   private startStreaming() {
@@ -386,7 +411,15 @@ Start by configuring your Google Cloud project, then ask questions about your da
       if (messagesContainer) {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
       }
-    }, 100);
+    }, 50);
+    
+    // Also try after a longer delay to ensure content is rendered
+    setTimeout(() => {
+      const messagesContainer = document.querySelector('.messages') as HTMLElement;
+      if (messagesContainer) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+    }, 200);
   }
 
   private generateId(): string {

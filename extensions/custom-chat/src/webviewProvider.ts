@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { ConversationalAnalyticsService } from './conversationalAnalyticsService';
 import { DeveloperAgentService } from './developerAgentService';
 import { ConfigHelper } from './configHelper';
+import { ConfigService } from './configService';
 import { ParsedStreamResponse } from './types/responseTypes';
 import { ResponseParser } from './utils/responseParser';
 import * as path from 'path';
@@ -77,6 +78,18 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
                     case 'restoreCheckpoint':
                         console.log('Handling restoreCheckpoint');
                         this._handleRestoreCheckpoint(message.checkpointId);
+                        return;
+                    case 'stopRequest':
+                        console.log('Handling stopRequest');
+                        this._handleStopRequest();
+                        return;
+                    case 'reauthenticate':
+                        console.log('Handling reauthenticate');
+                        this._handleReauthenticate();
+                        return;
+                    case 'acceptChanges':
+                        console.log('Handling acceptChanges');
+                        this._handleAcceptChanges();
                         return;
                     default:
                         console.log('Unknown command:', message.command);
@@ -570,6 +583,141 @@ export class CustomChatWebviewProvider implements vscode.WebviewViewProvider {
                 text: `❌ Error restoring checkpoint: ${error instanceof Error ? error.message : String(error)}`
             });
             this._view.webview.postMessage({ command: 'updateStatus', text: 'Ready' });
+        }
+    }
+
+    private async _handleStopRequest() {
+        try {
+            console.log('=== Handling stop request ===');
+            
+            // Stop the developer agent service if it's processing
+            const developerAgentService = DeveloperAgentService.getInstance();
+            if (developerAgentService.isSessionActive()) {
+                await developerAgentService.cancelRequest();
+                console.log('Agent session cancelled');
+            }
+            
+            // Update the webview to show that processing has stopped
+            this._view?.webview.postMessage({
+                command: 'setProcessing',
+                processing: false
+            });
+            
+            this._view?.webview.postMessage({
+                command: 'updateStatus',
+                text: 'Request stopped'
+            });
+            
+        } catch (error) {
+            console.error('Error handling stop request:', error);
+        }
+    }
+
+    private async _handleReauthenticate() {
+        let projectId = '';
+        try {
+            console.log('=== Handling reauthenticate ===');
+            
+            if (!this._view) return;
+            
+            this._view.webview.postMessage({ command: 'updateStatus', text: 'Reauthenticating...' });
+            
+            // Get the current project ID
+            const configService = ConfigService.getInstance();
+            projectId = await configService.getEffectiveProjectId();
+            
+            if (!projectId) {
+                this._view.webview.postMessage({ 
+                    command: 'addError', 
+                    text: '❌ No project ID configured. Please configure a project first.' 
+                });
+                return;
+            }
+            
+            // Set gcloud project
+            const { exec } = require('child_process');
+            await new Promise<void>((resolve, reject) => {
+                exec(`gcloud config set project ${projectId}`, (error: any) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+            
+            // Re-authenticate with the correct project
+            await new Promise<void>((resolve, reject) => {
+                exec('gcloud auth application-default login', (error: any) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+            
+            this._view.webview.postMessage({ 
+                command: 'addMessage', 
+                text: `✅ **Reauthentication Complete**\n\nSuccessfully reauthenticated with project: **${projectId}**\n\nYou can now try your request again.`,
+                isUser: false 
+            });
+            
+            this._view.webview.postMessage({ command: 'updateStatus', text: 'Ready' });
+            
+        } catch (error) {
+            console.error('Error during reauthentication:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            
+            if (this._view) {
+                this._view.webview.postMessage({ 
+                    command: 'addError', 
+                    text: `❌ **Reauthentication Failed**\n\nError: ${errorMessage}\n\nPlease try running the reauthentication command manually:\n\`\`\`bash\ngcloud config set project ${projectId}\ngcloud auth application-default login\n\`\`\`` 
+                });
+                this._view.webview.postMessage({ command: 'updateStatus', text: 'Ready' });
+            }
+        }
+    }
+
+    private async _handleAcceptChanges() {
+        try {
+            console.log('=== Handling accept changes ===');
+            
+            // Update status
+            this._view?.webview.postMessage({ command: 'updateStatus', text: 'Staging changes with git add...' });
+            
+            // Get the current workspace directory
+            const workspaceDir = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+            if (!workspaceDir) {
+                throw new Error('No workspace directory found');
+            }
+            
+            console.log('[WebviewProvider] Staging changes in workspace:', workspaceDir);
+            
+            // Run git add .
+            const { exec } = require('child_process');
+            await new Promise<void>((resolve, reject) => {
+                exec('git add .', { cwd: workspaceDir }, (error: any, stdout: any, stderr: any) => {
+                    if (error) {
+                        console.error('[WebviewProvider] Error staging changes:', error);
+                        console.error('[WebviewProvider] stderr:', stderr);
+                        reject(error);
+                    } else {
+                        console.log('[WebviewProvider] Successfully staged changes');
+                        console.log('[WebviewProvider] stdout:', stdout);
+                        resolve();
+                    }
+                });
+            });
+            
+            this._view?.webview.postMessage({ command: 'updateStatus', text: '✅ Changes staged successfully! Ready to commit.' });
+            
+        } catch (error) {
+            console.error('[WebviewProvider] Error staging changes:', error);
+            this._view?.webview.postMessage({ 
+                command: 'updateStatus', 
+                text: `❌ Failed to stage changes: ${error instanceof Error ? error.message : String(error)}` 
+            });
         }
     }
 } 
